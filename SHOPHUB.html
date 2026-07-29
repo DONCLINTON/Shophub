@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopHub — Marketplace</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+    <style>
+        /* ─── Google Font ─── */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap');
+
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f97316;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ea580c;
+        }
+
+        /* ─── Animations ─── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.4s ease forwards;
+        }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        .pulse-dot {
+            animation: pulse-dot 1.2s ease-in-out infinite;
+        }
+
+        /* ─── Category Nav ─── */
+        .cat-scroll {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .cat-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .cat-scroll::-webkit-scrollbar-thumb {
+            background: #f97316;
+            border-radius: 20px;
+        }
+        .cat-scroll::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 20px;
+        }
+
+        /* ─── Product Card ─── */
+        .product-card {
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+            will-change: transform;
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.18);
+        }
+        .product-card .card-img {
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .card-img {
+            transform: scale(1.03);
+        }
+
+        /* ─── Category Tile ─── */
+        .cat-tile {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cat-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px -8px rgba(249, 115, 22, 0.25);
+        }
+
+        /* ─── WhatsApp Button ─── */
+        .wa-btn {
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+        .wa-btn:hover {
+            transform: scale(1.02);
+        }
+        .wa-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ─── Form ─── */
+        .form-input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        }
+
+        /* ─── Image Preview ─── */
+        #imagePreview {
+            transition: opacity 0.25s ease;
+        }
+
+        /* ─── Toast ─── */
+        .toast {
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ─── Skeleton ─── */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* ─── Responsive tweaks ─── */
+        @media (max-width: 640px) {
+            .cat-tile {
+                padding: 10px 14px !important;
+                font-size: 12px !important;
+            }
+            .cat-tile .text-2xl {
+                font-size: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-8 antialiased">
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  HEADER  (Jumia-style)                         -->
+    <!-- ════════════════════════════════════════════════ -->
+    <header class="bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+
+            <!-- Logo -->
+            <div class="flex items-center gap-2 cursor-pointer" onclick="filterCategory('All')">
+                <span class="text-2xl font-black tracking-tight">SHOP<span class="text-yellow-300">HUB</span></span>
+                <span class="hidden sm:inline text-[10px] font-semibold bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">.ug</span>
+            </div>
+
+            <!-- Search Bar (desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md mx-4 relative">
+                <input type="text" id="searchInput" placeholder="Search for products, brands &amp; more..."
+                class="w-full pl-4 pr-10 py-2.5 rounded-full text-gray-800 text-sm bg-white/95 focus:outline-none focus:ring-2 focus:ring-yellow-300 shadow-inner" />
+                <button onclick="searchProducts()" class="absolute right-1 top-1/2 -translate-y-1/2 bg-orange-500 hover:bg-orange-400 text-white rounded-full p-1.5 px-4 text-xs font-bold transition">
+                    Search
+                </button>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <a href="#post-form" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-5 py-2 rounded-full text-sm transition shadow-md hover:shadow-lg flex items-center gap-1.5">
+                    <span>+</span> Sell
+                </a>
+                <button onclick="filterCategory('All')" class="hidden sm:inline-block text-sm font-medium hover:text-yellow-200 transition">
+                    All
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ─── Category Navigation (horizontal scroll) ─── -->
+        <div class="max-w-7xl mx-auto px-4 pb-2">
+            <nav class="cat-scroll flex gap-1.5 overflow-x-auto py-1.5 text-sm font-medium">
+                <button onclick="filterCategory('All')" class="cat-btn active whitespace-nowrap bg-white/20 text-white px-4 py-1.5 rounded-full text-xs font-bold transition hover:bg-white/30">
+                    🏠 All
+                </button>
+                <button onclick="filterCategory('Electronics')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    📱 Electronics
+                </button>
+                <button onclick="filterCategory('Phones')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    📲 Phones
+                </button>
+                <button onclick="filterCategory('Computers')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    💻 Computers
+                </button>
+                <button onclick="filterCategory('Fashion')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    👗 Fashion
+                </button>
+                <button onclick="filterCategory('Clothes')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    👕 Clothes
+                </button>
+                <button onclick="filterCategory('Home & Kitchen')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    🏠 Home &amp; Kitchen
+                </button>
+                <button onclick="filterCategory('Beauty')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    💄 Beauty
+                </button>
+                <button onclick="filterCategory('Sports')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    ⚽ Sports
+                </button>
+                <button onclick="filterCategory('Books')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    📚 Books
+                </button>
+                <button onclick="filterCategory('Automotive')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    🚗 Automotive
+                </button>
+                <button onclick="filterCategory('Toys')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    🧸 Toys
+                </button>
+                <button onclick="filterCategory('General')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition hover:bg-white/10">
+                    📦 General
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  MAIN CONTENT                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <main class="max-w-7xl mx-auto px-4 mt-5 space-y-8">
+
+        <!-- ─── Hero Banner (Jumia-style promo) ─── -->
+        <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500/90 to-orange-400/90 text-white shadow-md hidden sm:block">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-30"></div>
+            <div class="relative px-6 py-8 md:py-10 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm font-semibold tracking-wider uppercase opacity-80">🔥 Hot Deals</p>
+                    <h2 class="text-2xl md:text-3xl font-black leading-tight">Best Prices in Uganda</h2>
+                    <p class="text-sm md:text-base opacity-90 max-w-md mt-1">Shop thousands of items from trusted sellers near you.</p>
+                </div>
+                <div class="flex gap-3 text-center">
+                    <div class="bg-white/20 backdrop-blur-sm px-5 py-2 rounded-xl">
+                        <p class="text-2xl font-black">500+</p>
+                        <p class="text-[10px] uppercase tracking-wider opacity-80">Listings</p>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm px-5 py-2 rounded-xl">
+                        <p class="text-2xl font-black">12</p>
+                        <p class="text-[10px] uppercase tracking-wider opacity-80">Categories</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Category Grid (quick browse) ─── -->
+        <section>
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400">Browse Categories</h2>
+                <span class="text-xs text-gray-400 hidden sm:inline">tap to filter</span>
+            </div>
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2">
+                <button onclick="filterCategory('Electronics')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">📱</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Electronics</p>
+                </button>
+                <button onclick="filterCategory('Phones')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">📲</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Phones</p>
+                </button>
+                <button onclick="filterCategory('Computers')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">💻</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Computers</p>
+                </button>
+                <button onclick="filterCategory('Fashion')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">👗</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Fashion</p>
+                </button>
+                <button onclick="filterCategory('Clothes')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">👕</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Clothes</p>
+                </button>
+                <button onclick="filterCategory('Home & Kitchen')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">🏠</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Home</p>
+                </button>
+                <button onclick="filterCategory('Beauty')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">💄</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Beauty</p>
+                </button>
+                <button onclick="filterCategory('Sports')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">⚽</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Sports</p>
+                </button>
+                <button onclick="filterCategory('Books')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">📚</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Books</p>
+                </button>
+                <button onclick="filterCategory('Automotive')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">🚗</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Auto</p>
+                </button>
+                <button onclick="filterCategory('Toys')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">🧸</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">Toys</p>
+                </button>
+                <button onclick="filterCategory('General')" class="cat-tile bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100 hover:border-orange-200 transition">
+                    <div class="text-2xl">📦</div>
+                    <p class="text-[10px] font-semibold text-gray-700 mt-1 truncate">General</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- ─── Product Grid ─── -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <h2 id="sectionTitle" class="text-xl font-extrabold text-gray-800 flex items-center gap-2">
+                    <span>🛍️</span> All Listings
+                </h2>
+                <span id="itemCount" class="text-xs font-medium text-gray-400 bg-gray-100 px-3 py-1 rounded-full">0 items</span>
+            </div>
+
+            <div id="catalog" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Products load dynamically -->
+            </div>
+        </section>
+
+        <!-- ─── Upload Form ─── -->
+        <section id="post-form" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 max-w-2xl mx-auto border border-gray-100">
+            <h2 class="text-2xl font-extrabold text-gray-800 mb-5 flex items-center gap-2">
+                <span class="bg-orange-100 text-orange-600 p-2 rounded-xl text-xl">📤</span>
+                Post an Item for Sale
+            </h2>
+            <form id="uploadForm" class="space-y-5">
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Item Title</label>
+                    <input type="text" id="title" placeholder="e.g. Samsung Galaxy S24 Ultra"
+                    class="form-input w-full border border-gray-200 rounded-xl p-3 text-sm transition bg-gray-50/50 focus:bg-white" required />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Price</label>
+                        <input type="text" id="price" placeholder="e.g. 850,000 UGX"
+                        class="form-input w-full border border-gray-200 rounded-xl p-3 text-sm transition bg-gray-50/50 focus:bg-white" required />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Category</label>
+                        <select id="category" class="form-input w-full border border-gray-200 rounded-xl p-3 text-sm bg-gray-50/50 focus:bg-white transition">
+                            <option value="Electronics">📱 Electronics</option>
+                            <option value="Phones">📲 Phones</option>
+                            <option value="Computers">💻 Computers</option>
+                            <option value="Fashion">👗 Fashion</option>
+                            <option value="Clothes">👕 Clothes</option>
+                            <option value="Home & Kitchen">🏠 Home &amp; Kitchen</option>
+                            <option value="Beauty">💄 Beauty</option>
+                            <option value="Sports">⚽ Sports</option>
+                          <option value="Books">📚 Books</option>
+                            <option value="Automotive">🚗 Automotive</option>
+                            <option value="Toys">🧸 Toys</option>
+                            <option value="General" selected>📦 General</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">WhatsApp Number <span class="font-normal lowercase">(with country code)</span></label>
+                    <input type="tel" id="whatsapp" placeholder="e.g. +256757815846"
+                    class="form-input w-full border border-gray-200 rounded-xl p-3 text-sm transition bg-gray-50/50 focus:bg-white" required />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Product Image</label>
+                    <div class="flex items-center gap-4 flex-wrap">
+                        <label class="cursor-pointer bg-orange-50 hover:bg-orange-100 border-2 border-dashed border-orange-200 rounded-xl px-6 py-3 text-sm font-semibold text-orange-600 transition flex items-center gap-2">
+                            📷 Choose Photo
+                            <input type="file" id="photo" accept="image/*" class="hidden" required />
+                        </label>
+                        <div id="imagePreview" class="hidden w-16 h-16 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 flex-shrink-0">
+                            <img id="previewImg" src="" alt="preview" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-base">
+                    🚀 Publish Listing
+                </button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  FOOTER                                        -->
+    <!-- ════════════════════════════════════════════════ -->
+    <footer class="max-w-7xl mx-auto px-4 mt-12 pt-6 border-t border-gray-200 text-gray-400 text-xs flex flex-col sm:flex-row justify-between items-center gap-2">
+        <p>&copy; 2026 <span class="font-bold text-gray-600">ShopHub.ug</span> — Uganda's Marketplace</p>
+        <p class="flex gap-4">
+            <span>📞 +256-757-815846</span>
+            <span>✉️ help@shophub.ug</span>
+        </p>
+    </footer>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  TOAST NOTIFICATION                            -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div id="toast" class="toast fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-2xl text-sm font-medium flex items-center gap-3 pointer-events-none">
+        <span id="toastIcon">✅</span>
+        <span id="toastMessage">Done!</span>
+    </div>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  JAVASCRIPT                                    -->
+    <!-- ════════════════════════════════════════════════ -->
+    <script>
+        // ─── CONFIG ────────────────────────────────────────
+        const SUPABASE_URL = 'https://lulijpkeslesdeyemada.supabase.co/rest/v1/';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1bGlqcGtlc2xlc2RleWVtYWRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMjM1MDMsImV4cCI6MjEwMDg5OTUwM30.ptWL1GF5DrshvF6VhwIs3HjRiA_qWgVlux3uk61Hi_A';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentCategory = 'All';
+        let allProducts = [];
+
+        // ─── DOM refs ──────────────────────────────────────
+        const catalog = document.getElementById('catalog');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const itemCount = document.getElementById('itemCount');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMessage');
+        const toastIcon = document.getElementById('toastIcon');
+        const form = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const fileInput = document.getElementById('photo');
+        const previewContainer = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const searchInput = document.getElementById('searchInput');
+
+        // ─── TOAST ─────────────────────────────────────────
+        let toastTimeout;
+
+        function showToast(message, icon = '✅') {
+            toastMsg.textContent = message;
+            toastIcon.textContent = icon;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+             
+        // ─── IMAGE PREVIEW ────────────────────────────────
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.classList.add('hidden');
+            }
+        });
+
+        // ─── RENDER PRODUCTS ──────────────────────────────
+        function renderProducts(products) {
+            if (products.length === 0) {
+                catalog.innerHTML = `
+                    <div class="col-span-full text-center py-14">
+                        <div class="text-5xl mb-3">🔍</div>
+                        <p class="text-gray-400 font-medium">No items found in this category.</p>
+                        <p class="text-gray-300 text-sm mt-1">Try adjusting your filter or post a new item.</p>
+                    </div>
+                `;
+                itemCount.textContent = '0 items';
+                return;
+            }
+
+            catalog.innerHTML = products.map((item, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100/80 flex flex-col animate-fade-up" style="animation-delay: ${index * 30}ms">
+                    <div class="relative overflow-hidden bg-gray-100">
+                        <img src="${item.image_url}" alt="${item.title}" 
+                             class="card-img h-44 w-full object-cover transition" 
+                             onerror="this.src='https://placehold.co/400x300/ffedd5/f97316?text=📷+No+Image'" />
+                        <span class="absolute top-2 left-2 bg-black/70 text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                            ${item.category || 'General'}
+                        </span>
+                        ${item.price ? `<span class="absolute top-2 right-2 bg-white/90 text-gray-800 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">${item.price}</span>` : ''}
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col">
+                        <h3 class="font-bold text-sm text-gray-800 line-clamp-2 leading-snug min-h-[2.4rem]">${item.title}</h3>
+                        <div class="mt-auto pt-2 flex items-center justify-between">
+                            <span class="text-orange-600 font-extrabold text-base">${item.price || 'Call for price'}</span>
+                            <a href="https://wa.me/${item.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent("Hi! I'm interested in: " + item.title)}" 
+                               target="_blank" 
+                               class="wa-btn bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-3.5 rounded-full text-[10px] flex items-center gap-1.5 shadow-sm transition">
+                                💬 Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            itemCount.textContent = `${products.length} item${products.length > 1 ? 's' : ''}`;
+        }
+
+        // ─── FETCH LISTINGS ───────────────────────────────
+        async function fetchListings(category = 'All') {
+            catalog.innerHTML = `
+                ${Array.from({ length: 8 }, () => `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                        <div class="skeleton h-44 w-full"></div>
+                        <div class="p-3 space-y-2">
+                            <div class="skeleton h-4 w-3/4"></div>
+                            <div class="skeleton h-3 w-1/2"></div>
+                            <div class="flex justify-between items-center pt-1">
+                                <div class="skeleton h-5 w-16"></div>
+                                <div class="skeleton h-7 w-16 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+
+            let query = supabaseClient.from('listings').select('*').order('created_at', { ascending: false });
+            if (category !== 'All') {
+                query = query.eq('category', category);
+            }
+
+            const { data, error } = await query;
+            if (error) {
+                console.error(error);
+                showToast('Failed to load items', '❌');
+                catalog.innerHTML = `<p class="col-span-full text-center text-red-400 py-10">⚠️ Could not load listings</p>`;
+                return;
+            }
+
+            allProducts = data || [];
+            renderProducts(allProducts);
+        }
+
+        // ─── SEARCH     
+function searchProducts() {
+            const q = searchInput.value.trim().toLowerCase();
+            if (!q) {
+                filterCategory(currentCategory);
+                return;
+            }
+            const filtered = allProducts.filter(p =>
+                p.title.toLowerCase().includes(q) ||
+                (p.category && p.category.toLowerCase().includes(q))
+            );
+            sectionTitle.innerHTML = `🔎 Results for “${q}”`;
+            renderProducts(filtered);
+            // highlight active state
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active', 'bg-white/20', 'text-white'));
+        }
+
+        // ─── FILTER CATEGORY ──────────────────────────────
+        function filterCategory(cat) {
+            currentCategory = cat;
+            searchInput.value = '';
+            sectionTitle.innerHTML = cat === 'All' ? '🛍️ All Listings' : `📂 ${cat} Listings`;
+
+            // Update header nav buttons
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-white/20', 'text-white');
+                btn.classList.add('text-white/80');
+                const txt = btn.textContent.trim();
+                if (cat === 'All' && txt.includes('All')) {
+                    btn.classList.add('active', 'bg-white/20', 'text-white');
+                    btn.classList.remove('text-white/80');
+                } else if (txt.includes(cat)) {
+                    btn.classList.add('active', 'bg-white/20', 'text-white');
+                    btn.classList.remove('text-white/80');
+                }
+            });
+
+            fetchListings(cat);
+        }
+
+        // ─── FORM SUBMISSION ──────────────────────────────
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value.trim();
+            const price = document.getElementById('price').value.trim();
+            const category = document.getElementById('category').value;
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const file = fileInput.files[0];
+
+            if (!title || !price || !whatsapp || !file) {
+                showToast('Please fill in all fields and select an image', '⚠️');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Publishing...';
+            submitBtn.classList.add('opacity-70');
+
+            try {
+                // Upload image
+                const fileName = `${Date.now()}_${file.name}`;
+                const { error: uploadError } = await supabaseClient.storage
+                    .from('item-photos')
+                    .upload(fileName, file);
+
+                if (uploadError) {
+                    console.error(uploadError);
+                    showToast('Image upload failed', '❌');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '🚀 Publish Listing';
+                    submitBtn.classList.remove('opacity-70');
+                    return;
+                }
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('item-photos')
+                    .getPublicUrl(fileName);
+
+                // Save to DB
+                const { error: dbError } = await supabaseClient
+                    .from('listings')
+                    .insert([{
+                        title,
+                        price,
+                        category,
+                        whatsapp,
+                        image_url: urlData.publicUrl
+                    }]);
+
+                if (dbError) {
+                    console.error(dbError);
+                    showToast('Failed to save item', '❌');
+                } else {
+                    showToast('🎉 Item published successfully!', '✅');
+                    form.reset();
+                    previewContainer.classList.add('hidden');
+                    fetchListings(currentCategory);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Something went wrong', '❌');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '🚀 Publish Listing';
+            submitBtn.classList.remove('opacity-70');
+        });
+
+        // ─── SEARCH ON ENTER ──────────────────────────────
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') searchProducts();
+        });
+
+        // ─── INIT ──────────────────────────────────────────
+        fetchListings('All');
+    </script>
+
+</body>
+</html>
+```  
