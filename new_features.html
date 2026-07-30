@@ -1,0 +1,93 @@
+// js/shophub-features.js
+// Single combined features bundle for ShopHub
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. INITIALIZE GEOLOCATION DISTANCE CALCULATOR
+  initGeolocation();
+});
+
+// GLOBAL CLICK DELEGATION HANDLER
+document.addEventListener('click', (event) => {
+  
+  // --- FEATURE 1: WHATSAPP DIRECT CHAT ---
+  const waBtn = event.target.closest('[data-whatsapp]');
+  if (waBtn) {
+    const phone = waBtn.dataset.whatsapp.replace(/[^0-9]/g, '');
+    const itemTitle = waBtn.dataset.title || 'this item';
+    const text = encodeURIComponent(`Hi! I'm interested in buying "${itemTitle}" listed on ShopHub.`);
+    window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    return;
+  }
+
+  // --- FEATURE 2: CLICK TO CALL ---
+  const callBtn = event.target.closest('[data-call]');
+  if (callBtn) {
+    const phone = callBtn.dataset.call;
+    if (phone) window.location.href = `tel:${phone}`;
+    return;
+  }
+
+  // --- FEATURE 3: FAVORITES / WISHLIST ---
+  const favBtn = event.target.closest('[data-fav-id]');
+  if (favBtn) {
+    const itemId = favBtn.dataset.favId;
+    const isSaved = toggleWishlist(itemId);
+    favBtn.classList.toggle('is-favourite', isSaved);
+    favBtn.innerHTML = isSaved ? '❤️' : '🤍';
+    return;
+  }
+});
+
+// --- WISHLIST LOGIC ---
+const WISHLIST_KEY = 'shophub_wishlist';
+
+function getWishlist() {
+  return JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
+}
+
+function toggleWishlist(itemId) {
+  let list = getWishlist();
+  if (list.includes(itemId)) {
+    list = list.filter(id => id !== itemId);
+  } else {
+    list.push(itemId);
+  }
+  localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+  return list.includes(itemId);
+}
+
+// --- GEOLOCATION LOGIC (Haversine Formula) ---
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth radius in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  
+  const a = 
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return (R * c).toFixed(1);
+}
+
+function initGeolocation() {
+  if (!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const userLat = position.coords.latitude;
+    const userLng = position.coords.longitude;
+
+    document.querySelectorAll('.distance-tag').forEach((el) => {
+      const itemLat = parseFloat(el.dataset.lat);
+      const itemLng = parseFloat(el.dataset.lng);
+
+      if (itemLat && itemLng) {
+        const km = calculateDistance(userLat, userLng, itemLat, itemLng);
+        el.textContent = `📍 ${km} km away`;
+      }
+    });
+  }, (err) => {
+    console.warn("Geolocation denied or unavailable:", err.message);
+  });
+}
