@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shhop.netlify.app/sitemap.xml

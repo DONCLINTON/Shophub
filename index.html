@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta name="google-site-verification" content="T4M-4AmLeQFE4uwon3yVMvsAy1KCfnNBnLAWRla2oV8"/>
+<meta name="google-adsense-account" content="ca-pub-9607775775477372">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9607775775477372" crossorigin="anonymous"></script>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShopHub Uganda — Buy, Sell, Jobs & Services</title>
+<meta name="description" content="ShopHub Uganda is an online marketplace to buy and sell products, discover services, land and agriculture listings, and find jobs. Contact sellers directly.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://shhop.netlify.app/">
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#FF6600"><link rel="apple-touch-icon" href="/icon_512.png"/>
+<script>window.normalizePhone=function(r){let d=String(r||'').replace(/\D/g,'');if(!d)return'';if(d.startsWith('256')&&d.length>=12)return d;if(d.startsWith('0')&&d.length===10)return'256'+d.slice(1);if(d.startsWith('7')&&d.length===9)return'256'+d;return d;};if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/service-worker.js').then(()=>console.log('SW')).catch(e=>console.error(e));});}</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap');
+*{font-family:'Inter',system-ui,sans-serif}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f1f1}::-webkit-scrollbar-thumb{background:#f97316;border-radius:8px}.dark ::-webkit-scrollbar-track{background:#1e293b}.dark ::-webkit-scrollbar-thumb{background:#ea580c}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.animate-fade-up{animation:fadeUp .4s ease forwards}
+@keyframes modalPop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}.sell-modal-pop{animation:modalPop .28s cubic-bezier(.22,1,.36,1)}
+.cat-scroll{scroll-behavior:smooth;-webkit-overflow-scrolling:touch}.cat-scroll::-webkit-scrollbar{height:4px}.cat-scroll::-webkit-scrollbar-thumb{background:#f97316;border-radius:20px}.cat-scroll::-webkit-scrollbar-track{background:#e5e7eb}.dark .cat-scroll::-webkit-scrollbar-track{background:#334155}
+.product-card{transition:transform .2s,box-shadow .25s}.product-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px -12px rgba(0,0,0,.18)}.dark .product-card:hover{box-shadow:0 20px 40px -12px rgba(0,0,0,.6)}.product-card .card-img{transition:transform .3s}.product-card:hover .card-img{transform:scale(1.03)}
+.wa-btn,.call-btn{transition:background .2s,transform .15s}.wa-btn:hover,.call-btn:hover{transform:scale(1.02)}.wa-btn:active,.call-btn:active{transform:scale(.96)}
+.form-input:focus{outline:none;border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,.15)}
+.toast{transform:translateY(-20px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s}.toast.show{transform:translateY(0);opacity:1}
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}.dark .skeleton{background:linear-gradient(90deg,#1e293b 25%,#334155 50%,#1e293b 75%);background-size:200% 100%}@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+#google_translate_element{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:130px!important;max-width:160px!important;height:34px!important;overflow:hidden!important}
+.goog-te-gadget-simple{background:rgba(255,255,255,.2)!important;border:1px solid rgba(255,255,255,.4)!important;padding:0 10px!important;border-radius:9999px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;height:100%!important;width:100%!important;box-sizing:border-box!important;border-bottom:none!important;}
+.goog-te-menu-value{display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;line-height:1!important;white-space:nowrap!important;border-bottom:none!important;text-decoration:none!important;}
+.goog-te-gadget-simple span,.goog-te-menu-value span{color:#fff!important;font-size:11px!important;font-weight:600!important;line-height:1!important;vertical-align:middle!important;text-decoration:none!important;}
+.goog-te-menu-value:before,.goog-te-menu-value:after{display:none!important;}
+.goog-te-gadget-icon,.goog-te-menu-value img,.goog-te-banner-frame{display:none!important}.goog-te-gadget{font-size:0!important;line-height:0!important}body{top:0!important}
+.card-actions{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:5}.card-action-btn{width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:transform .15s,background .2s}.card-action-btn:hover{transform:scale(1.12);background:rgba(0,0,0,.75)}.card-action-btn.saved{background:#ef4444}.views-badge{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;pointer-events:none}
+.pin-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}.pin-modal-box{background:#fff;border-radius:20px;max-width:380px;width:100%;padding:24px;text-align:center;animation:pinEnter .25s cubic-bezier(.22,1,.36,1)}.dark .pin-modal-box{background:#1e293b;color:#f1f5f9}@keyframes pinEnter{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}.pin-modal-box h3{font-size:18px;font-weight:800;color:#111827;margin:0 0 6px}.dark .pin-modal-box h3{color:#f1f5f9}.pin-modal-box p{font-size:12px;color:#6b7280;margin:0 0 18px}.dark .pin-modal-box p{color:#94a3b8}.pin-input{width:100%;padding:14px;font-size:22px;letter-spacing:8px;text-align:center;font-weight:800;border:2px solid #e5e7eb;border-radius:12px;outline:none;font-family:monospace}.dark .pin-input{background:#0f172a;border-color:#475569;color:#f1f5f9}.pin-input:focus{border-color:#f97316;box-shadow:0 0 0 4px rgba(249,115,22,.15)}.pin-btn-row{display:flex;gap:10px;margin-top:16px}.pin-btn{flex:1;padding:12px;border-radius:12px;font-weight:700;font-size:13px;border:none;cursor:pointer}.pin-btn.cancel{background:#f3f4f6;color:#374151}.dark .pin-btn.cancel{background:#334155;color:#cbd5e1}.pin-btn.confirm{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff}
+.floating-sell{background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 12px 28px -6px rgba(16,185,129,.6),0 6px 14px -4px rgba(5,150,105,.45);animation:fabPulse 2.5s infinite}.floating-sell:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-3px) scale(1.05)}@keyframes fabPulse{0%,100%{box-shadow:0 12px 28px -6px rgba(16,185,129,.6),0 0 0 0 rgba(16,185,129,.5)}50%{box-shadow:0 12px 28px -6px rgba(16,185,129,.8),0 0 0 12px rgba(16,185,129,0)}}
+.shophub-lower-wrapper{background:linear-gradient(180deg,#f9fafb 0%,#e5e7eb 8%,#94a3b8 18%,#334155 30%,#0b0f19 45%,#0b0f19 100%);color:#e2e8f0;padding:100px 14px 0;box-sizing:border-box;overflow-x:hidden}.dark .shophub-lower-wrapper{background:linear-gradient(180deg,#0f172a 0%,#1e293b 8%,#334155 18%,#1e293b 30%,#0f172a 45%,#0f172a 100%)}.support-card{background:linear-gradient(145deg,#161f33,#0f172a);border:1px solid rgba(255,107,0,.25);border-radius:16px;padding:18px;margin-bottom:24px;box-shadow:0 4px 20px rgba(0,0,0,.4)}.support-row{display:flex;align-items:center;gap:8px;font-size:13px;color:#cbd5e1;margin-bottom:12px}.whatsapp-banner{display:flex;align-items:center;justify-content:center;gap:10px;background:#25d366;color:#000;padding:12px 14px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;margin-bottom:14px}.assistance-text p{margin:0;font-weight:600;font-size:14px;color:#f8fafc}.assistance-text small{color:#94a3b8;font-size:12px}.social-pills{display:flex;gap:10px;margin-top:14px}.social-btn{width:38px;height:38px;background:#1e293b;border:1px solid #334155;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none}.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}.stat-card{background:linear-gradient(135deg,rgba(255,107,0,.12),rgba(15,23,42,.9));border:1px solid rgba(255,107,0,.3);border-radius:14px;padding:16px;text-align:center}.stat-number{font-size:24px;font-weight:800;color:#ff6b00;margin-bottom:2px}.stat-label{font-size:12px;color:#cbd5e1}.newsletter-card{background:linear-gradient(145deg,#131c2e,#0f172a);border-radius:16px;padding:20px;border:1px solid #1e293b;margin-bottom:24px}.newsletter-card h3{color:#fff;margin:0 0 6px;font-size:18px}.newsletter-card p{color:#94a3b8;font-size:12px;margin:0 0 14px}.subscribe-form{display:flex;gap:6px}.subscribe-form input{flex:1;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 12px;color:#fff;font-size:13px;outline:none}.subscribe-form button{background:#ff6b00;color:#fff;border:none;border-radius:8px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}.payments-section h4{color:#fff;font-size:15px;margin:0 0 12px}.payment-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}.pay-badge{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700}.pay-badge.visa{background:#1e3a8a;color:#93c5fd}.pay-badge.mastercard{background:#7f1d1d;color:#fca5a5}.pay-badge.momo{background:#ffcc00;color:#000}.pay-badge.airtel{background:#e11d48;color:#fff}.pay-badge.cash{background:#15803d;color:#bbf7d0}
+.shophub-footer{text-align:center;border-top:1px solid #1e293b;padding-top:20px;margin-bottom:20px}.shophub-footer h3{color:#fff;font-size:16px;margin:0 0 4px}.tagline{color:#94a3b8;font-size:12px;margin:0 0 14px}.footer-desc{color:#64748b;font-size:11px;max-width:400px;margin:0 auto 14px;line-height:1.4}.trust-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;font-size:11px;color:#cbd5e1;margin-bottom:16px}.footer-copy{font-size:11px;color:#64748b;margin-bottom:16px}
+.bottom-counter-bar{width:100vw;margin-left:calc(-50vw + 50%);padding:12px 0;background:linear-gradient(90deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:center;margin-bottom:60px}.counter-content{display:flex;align-items:center;gap:8px}.live-pulse{width:8px;height:8px;background-color:#10b981;border-radius:50%;animation:pulse-ring 1.8s infinite}@keyframes pulse-ring{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(16,185,129,.6)}70%{transform:scale(1);box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(16,185,129,0)}}.counter-text{color:#94a3b8;font-size:11px;font-weight:700;letter-spacing:1px}.counter-divider{color:#475569;font-size:10px}.counter-num{color:#38bdf8;font-size:15px;font-weight:800;font-family:monospace}
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen pb-8 antialiased overflow-x-hidden max-w-full transition-colors duration-300">
+
+<header class="bg-gradient-to-r from-orange-600 to-orange-500 dark:from-slate-800 dark:to-slate-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-2 cursor-pointer" onclick="filterCategory('All')"><span class="text-2xl font-black tracking-tight">SHOP<span class="text-yellow-300">HUB</span></span><span class="hidden sm:inline text-[10px] font-semibold bg-white/20 px-2 py-0.5 rounded-full uppercase">.ug</span></div>
+    <div class="hidden md:flex flex-1 max-w-md mx-4 relative"><input type="text" id="searchInput" placeholder="Search..." class="w-full pl-4 pr-20 py-2.5 rounded-full text-gray-800 text-sm bg-white/95 focus:outline-none focus:ring-2 focus:ring-yellow-300 shadow-inner dark:bg-slate-700 dark:text-slate-100 dark:border dark:border-slate-600 dark:placeholder-slate-400 dark:focus:ring-orange-500"/><button onclick="searchProducts()" class="absolute right-1 top-1/2 -translate-y-1/2 bg-orange-500 hover:bg-orange-400 text-white rounded-full p-1.5 px-4 text-xs font-bold transition">Search</button></div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button onclick="toggleDarkMode()" id="darkModeToggle" class="bg-white/20 hover:bg-white/30 text-white rounded-full w-8 h-8 flex items-center justify-center transition border border-white/30 shrink-0 text-sm">🌙</button>
+      <div id="google_translate_element" class="hidden md:flex"></div>
+      <button id="jobsBtn" onclick="switchView('jobs')" class="bg-white/20 hover:bg-white/30 text-white font-bold text-xs px-3 py-2 rounded-full transition border border-white/30 flex items-center gap-1 shrink-0">💼 Jobs<span id="jobsCountBadge" class="jobs-badge hidden">0</span></button>
+      <button onclick="openSellModal()" class="active:scale-95 bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xs px-3 py-2 rounded-full transition shadow flex items-center gap-1 shrink-0"><span>+</span> Sell</button>
+    </div>
+  </div>
+  <div class="md:hidden px-4 pb-3"><div class="relative"><input type="text" id="mobileSearchInput" placeholder="Search items..." class="w-full pl-4 pr-10 py-2 rounded-full text-gray-800 text-xs bg-white/95 focus:outline-none focus:ring-2 focus:ring-yellow-300 shadow-inner dark:bg-slate-700 dark:text-slate-100 dark:border dark:border-slate-600 dark:placeholder-slate-400 dark:focus:ring-orange-500"/><button onclick="searchProductsMobile()" class="absolute right-1 top-1/2 -translate-y-1/2 bg-orange-500 text-white rounded-full px-3 py-1 text-[10px] font-bold">Search</button></div></div>
+  <div class="max-w-7xl mx-auto px-4 pb-2"><nav class="cat-scroll flex gap-1.5 overflow-x-auto py-1.5 text-sm font-medium">
+    <button onclick="filterCategory('All')" class="cat-btn active whitespace-nowrap bg-white/20 text-white px-4 py-1.5 rounded-full text-xs font-bold transition">🏠 All</button>
+    <button onclick="filterCategory('Electronics')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">📱 Electronics</button>
+    <button onclick="filterCategory('Phones')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">📲 Phones</button>
+    <button onclick="filterCategory('Computers')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">💻 Computers</button>
+    <button onclick="filterCategory('Fashion')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">👗 Fashion</button>
+    <button onclick="filterCategory('Clothes')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">👕 Clothes</button>
+    <button onclick="filterCategory('Home & Kitchen')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🏠 Home & Kitchen</button>
+    <button onclick="filterCategory('Beauty')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">💄 Beauty</button>
+    <button onclick="filterCategory('Sports')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">⚽ Sports</button>
+    <button onclick="filterCategory('Books')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">📚 Books</button>
+    <button onclick="filterCategory('Automotive')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🚗 Automotive</button>
+    <button onclick="filterCategory('Services')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🛠️ Services</button>
+    <button onclick="filterCategory('Agriculture')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🌾 Agriculture</button>
+    <button onclick="filterCategory('Entertainment')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🎬 Entertainment</button>
+    <button onclick="filterCategory('Kids')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">👶 Kids</button>
+    <button onclick="filterCategory('Toys')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🧸 Toys</button>
+    <button onclick="filterCategory('Stationery')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">✏️ Stationery</button>
+    <button onclick="filterCategory('Food Stuffs')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🍲 Food Stuffs</button>
+    <button onclick="filterCategory('Hardware')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🔨 Hardware</button>
+    <button onclick="filterCategory('Lands')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">🏞️ Lands</button>
+    <button onclick="filterCategory('General')" class="cat-btn whitespace-nowrap text-white/80 hover:text-white px-4 py-1.5 rounded-full text-xs font-medium transition">📦 General</button>
+  </nav></div>
+</header>
+
+<main id="view-marketplace" class="page-view max-w-7xl mx-auto px-4 mt-5 space-y-6 pb-44">
+  <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 dark:border-amber-500 p-3.5 rounded-r-xl shadow-sm flex items-center gap-3 text-xs md:text-sm text-red-900 dark:text-amber-200 transition-colors"><span class="text-xl">💡</span><div><span class="font-bold">Safety Tip:</span> Always meet sellers in public places and inspect items carefully before paying.</div></div>
+
+  <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500/90 to-orange-400/90 dark:from-slate-800 dark:to-slate-900 text-white shadow-md hidden sm:block transition-colors border border-transparent dark:border-slate-700">
+    <div class="relative px-6 py-8 md:py-10 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div><p class="text-sm font-semibold tracking-wider uppercase opacity-80">🔥 Hot Deals</p><h2 class="text-2xl md:text-3xl font-black leading-tight">Best Prices in Uganda</h2><p class="text-sm opacity-90 max-w-md mt-1">Shop thousands of items from trusted sellers near you.</p></div>
+      <div class="flex gap-3 text-center"><div class="bg-white/20 backdrop-blur-sm px-5 py-2 rounded-xl"><p class="text-2xl font-black">50+</p><p class="text-[10px] uppercase opacity-80">Listings</p></div><div class="bg-white/20 backdrop-blur-sm px-5 py-2 rounded-xl"><p class="text-2xl font-black">15</p><p class="text-[10px] uppercase opacity-80">Categories</p></div></div>
+    </div>
+  </section>
+
+  <section class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-slate-700 space-y-3 transition-colors">
+    <div class="flex flex-wrap items-center gap-3">
+      <span class="text-sm font-bold text-gray-500 dark:text-slate-400">📍 Location:</span>
+      <select id="locationFilter" onchange="applyFilters()" class="form-input text-xs sm:text-sm border border-gray-200 dark:border-slate-600 rounded-lg p-2 bg-gray-50/50 dark:bg-slate-900 flex-1 max-w-xs dark:text-slate-100">
+        <option value="All">All Uganda</option><option value="Kampala Central">Kampala Central</option><option value="Kampala, Makindye division">Kampala, Makindye division</option><option value="Kampala, Nakawa division">Kampala, Nakawa division</option><option value="Kampala, Kawempe division">Kampala, Kawempe division</option><option value="Kampala, Rubaga division">Kampala, Rubaga division</option><option value="Wakiso">Wakiso</option><option value="Jinja">Jinja</option><option value="Mbarara">Mbarara</option><option value="Gulu">Gulu</option><option value="Other districts/city">Other districts/city</option>
+      </select>
+      <span class="text-sm font-bold text-gray-500 dark:text-slate-400">↕️ Sort:</span>
+      <select id="sortFilter" onchange="applyFilters()" class="form-input text-xs sm:text-sm border border-gray-200 dark:border-slate-600 rounded-lg p-2 bg-gray-50/50 dark:bg-slate-900 dark:text-slate-100"><option value="newest">Newest first</option><option value="price-asc">Price: Low → High</option><option value="price-desc">Price: High → Low</option><option value="views">Most viewed</option></select>
+      <label class="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-slate-400 ml-auto cursor-pointer"><input type="checkbox" id="showSoldToggle" onchange="applyFilters()" class="accent-orange-500"> Show sold items</label>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <span class="text-sm font-bold text-gray-500 dark:text-slate-400">💰 Price (UGX):</span>
+      <input type="number" id="priceMin" placeholder="Min" class="form-input text-xs border border-gray-200 dark:border-slate-600 rounded-lg p-2 bg-gray-50/50 dark:bg-slate-900 dark:text-slate-100 w-24"/>
+      <span class="text-gray-400 dark:text-slate-500 text-xs">to</span>
+      <input type="number" id="priceMax" placeholder="Max" class="form-input text-xs border border-gray-200 dark:border-slate-600 rounded-lg p-2 bg-gray-50/50 dark:bg-slate-900 dark:text-slate-100 w-24"/>
+      <button onclick="applyFilters()" class="bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition">Apply</button>
+      <button onclick="clearPriceRange()" class="text-xs text-gray-500 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 font-semibold">Clear</button>
+    </div>
+  </section>
+
+  <section class="py-2">
+    <h2 class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-slate-500 mb-3 px-1">Browse Categories</h2>
+    <div class="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-10 gap-2 sm:gap-3">
+      <button onclick="filterCategory('Electronics')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">📱</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Electronics</p></button>
+      <button onclick="filterCategory('Phones')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">📲</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Phones</p></button>
+      <button onclick="filterCategory('Computers')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">💻</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Computers</p></button>
+      <button onclick="filterCategory('Fashion')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-pink-100 dark:bg-pink-900/40 text-pink-600 dark:text-pink-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">👗</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Fashion</p></button>
+      <button onclick="filterCategory('Clothes')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">👕</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Clothes</p></button>
+      <button onclick="filterCategory('Home & Kitchen')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🏠</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Home</p></button>
+      <button onclick="filterCategory('Beauty')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-fuchsia-100 dark:bg-fuchsia-900/40 text-fuchsia-600 dark:text-fuchsia-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">💄</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Beauty</p></button>
+      <button onclick="filterCategory('Sports')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">⚽</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Sports</p></button>
+      <button onclick="filterCategory('Books')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-teal-100 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">📚</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Books</p></button>
+      <button onclick="filterCategory('Automotive')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🚗</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Automotive</p></button>
+      <button onclick="filterCategory('Services')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🛠️</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Services</p></button>
+      <button onclick="filterCategory('Agriculture')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-lime-100 dark:bg-lime-900/40 text-lime-600 dark:text-lime-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🌾</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Agriculture</p></button>
+      <button onclick="filterCategory('Entertainment')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🎬</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Entertainment</p></button>
+      <button onclick="filterCategory('Kids')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">👶</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Kids</p></button>
+      <button onclick="filterCategory('Toys')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🧸</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Toys</p></button>
+      <button onclick="filterCategory('Stationery')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">✏️</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Stationery</p></button>
+      <button onclick="filterCategory('Food Stuffs')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🍲</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Food</p></button>
+      <button onclick="filterCategory('Hardware')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-stone-200 dark:bg-slate-700 text-stone-700 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🔨</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Hardware</p></button>
+      <button onclick="filterCategory('Lands')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">🏞️</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">Lands</p></button>
+      <button onclick="filterCategory('General')" class="flex flex-col items-center gap-1 group"><span class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition">📦</span><p class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-slate-300 text-center w-full truncate">General</p></button>
+    </div>
+  </section>
+
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="sectionTitle" class="text-xl font-extrabold text-gray-800 dark:text-slate-100 flex items-center gap-2"><span>🛍️</span> All Listings</h2>
+      <span id="itemCount" class="text-xs font-medium text-gray-400 bg-gray-100 dark:bg-slate-800 dark:text-slate-300 px-3 py-1 rounded-full">0 items</span>
+    </div>
+    <div id="catalog" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+  </section>
+</main>
+
+<main id="view-jobs" class="page-view hidden max-w-7xl mx-auto px-4 py-6 pb-44">
+  <div class="jobs-hero bg-gradient-to-r from-indigo-700 to-blue-600 dark:from-indigo-900 dark:to-slate-900 text-white rounded-2xl p-6 shadow-md mb-6 border border-transparent dark:border-slate-700">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div><h1 class="text-2xl font-black">ShopHub Careers & Jobs</h1><p class="text-xs mt-1 text-indigo-100 dark:text-slate-300">Local employment & international recruitment</p></div>
+      <div class="flex items-center gap-2 flex-wrap"><button onclick="switchView('marketplace')" class="bg-white/20 hover:bg-white/30 text-white text-xs px-4 py-2 rounded-full border border-white/30 transition">← Marketplace</button><button onclick="openPostJobModal()" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xs px-4 py-2 rounded-full shadow transition flex items-center gap-1"><span>+</span> Post a Vacancy</button></div>
+    </div>
+    <div class="flex p-1 bg-indigo-900/50 dark:bg-slate-800/70 rounded-xl max-w-md mx-auto mt-6">
+      <button id="tab-uganda" onclick="toggleJobMarket('uganda')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm">🇺🇬 Uganda Jobs</button>
+      <button id="tab-international" onclick="toggleJobMarket('international')" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-white/80 hover:text-white">✈️ International</button>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-4"><div id="uganda-jobs-list" class="space-y-4"></div><div id="international-jobs-list" class="hidden space-y-4"></div></div>
+    <div class="space-y-4">
+      <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-2xl p-4"><h4 class="font-bold text-xs text-indigo-800 dark:text-indigo-300 flex items-center gap-1.5">⚠️ Safety First</h4><p class="text-xs text-indigo-700 dark:text-indigo-400 mt-1">Verify licensed recruitment agencies with the Ministry of Labour prior to paying fees.</p></div>
+      <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-4"><h4 class="font-bold text-xs text-gray-700 dark:text-slate-300 flex items-center gap-1.5 mb-2">💡 Tips</h4><ul class="text-[11px] text-gray-600 dark:text-slate-400 space-y-1 list-disc list-inside"><li>Never pay for a job offer.</li><li>Ask for a signed contract before travelling.</li><li>Keep digital copies of documents.</li></ul></div>
+    </div>
+  </div>
+</main>
+
+<div class="shophub-lower-wrapper">
+  <div class="support-card">
+    <div class="support-row"><span>🕒</span><span>Mon - Sat • 8:00 AM - 6:00 PM</span></div>
+    <a href="https://chat.whatsapp.com/E67YPTCqBjM3cwnE2HNpcA" class="whatsapp-banner" target="_blank"><span>💬</span><span>Join ShopHub WhatsApp</span></a>
+    <div class="assistance-text"><p>Need assistance?</p><small>Our support team is always ready to help.</small></div>
+    <div class="social-pills"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📷</a><a href="#" class="social-btn">💬</a><a href="#" class="social-btn">▶️</a></div>
+  </div>
+  <div class="stats-grid"><div class="stat-card"><div class="stat-number">20</div><div class="stat-label">Categories</div></div><div class="stat-card"><div class="stat-number">27+</div><div class="stat-label">Listings</div></div><div class="stat-card"><div class="stat-number">330+</div><div class="stat-label">Sellers</div></div><div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Access</div></div></div>
+  <div class="newsletter-card"><h3>Never Miss a Deal</h3><p>Subscribe for new listings and updates.</p><form class="subscribe-form" onsubmit="return false;"><input type="email" placeholder="Enter email..." required /><button type="submit">Subscribe</button></form></div>
+  <div class="payments-section"><h4>Secure Payments</h4><div class="payment-badges"><span class="pay-badge visa">💳 Visa</span><span class="pay-badge mastercard">💳 Mastercard</span><span class="pay-badge momo">📲 MTN MoMo</span><span class="pay-badge airtel">📲 Airtel</span><span class="pay-badge cash">💵 Cash</span></div></div>
+  <footer class="shophub-footer">
+    <h3>ShopHub Uganda</h3><p class="tagline">Connecting buyers and sellers across Uganda.</p>
+    <p class="footer-desc">ShopHub is Uganda's premier online marketplace for buying and selling electronics, vehicles, land, home appliances, and professional services. Post your items for free and reach thousands of potential buyers instantly.</p>
+    <div class="trust-tags"><span>🇺🇬 Made in Uganda</span><span>🛡️ Trusted</span><span>⚡ Fast</span></div>
+    <div class="footer-copy">© 2026 ShopHub • All Rights Reserved • Built with ❤️</div>
+  </footer>
+  <div class="bottom-counter-bar"><div class="counter-content"><span class="live-pulse"></span><span class="counter-text">TODAY'S VIEWS</span><span class="counter-divider">•</span><strong id="visitor-count" class="counter-num">—</strong></div></div>
+</div>
+
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-600 shadow-2xl text-white text-xl transition z-50">↑</button>
+<button onclick="openSellModal()" id="floatingSellBtn" class="active:scale-95 floating-sell fixed bottom-6 right-24 w-16 h-16 rounded-full text-white flex flex-col items-center justify-center z-50 transition-all"><span class="text-2xl font-black">+</span><span class="text-[9px] font-black tracking-wider mt-0.5">SELL</span></button>
+
+<div id="toast" class="toast fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-900 dark:bg-slate-700 text-white px-6 py-3 rounded-xl shadow-2xl text-sm font-medium flex items-center gap-3 pointer-events-none border border-transparent dark:border-slate-600"><span id="toastIcon">✅</span><span id="toastMessage">Done!</span></div>
+
+<div id="productModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm">
+  <div id="productModalBox" class="bg-white dark:bg-slate-800 w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-y-auto shadow-2xl relative translate-y-full sm:translate-y-0 transition-transform duration-300">
+    <div class="sticky top-0 z-30 h-0 text-right pr-3 pt-3 pointer-events-none">
+      <button onclick="closeProductModal()" aria-label="Close" class="pointer-events-auto bg-white/90 dark:bg-slate-700/90 backdrop-blur text-gray-700 dark:text-slate-100 rounded-full w-9 h-9 inline-flex items-center justify-center shadow-md text-xl font-bold">&times;</button>
+    </div>
+    <div class="relative bg-gray-100 dark:bg-slate-900"><img id="modalMainImage" src="" alt="" class="w-full h-64 sm:h-72 object-cover"/><div class="absolute bottom-3 left-3 flex gap-2"><span id="modalLocationBadge" class="bg-black/60 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full backdrop-blur-sm">📍</span><span id="modalConditionBadge" class="bg-blue-600 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full"></span></div></div>
+    <div id="modalThumbs" class="flex gap-2 overflow-x-auto px-4 pt-3 pb-1"></div>
+    <div class="p-4 sm:p-6 space-y-4">
+      <div><h2 id="modalTitle" class="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-slate-100"></h2><p id="modalPrice" class="text-2xl font-black text-orange-600 dark:text-orange-400 mt-1"></p></div>
+      <div><h3 class="text-xs font-bold uppercase text-gray-400 dark:text-slate-500 mb-1">Description</h3><p id="modalDescription" class="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-line"></p></div>
+      <div class="bg-gray-50 dark:bg-slate-900 rounded-xl p-4 space-y-2"><h3 class="text-xs font-bold uppercase text-gray-400 dark:text-slate-500 mb-1">Seller Info</h3><p class="text-sm text-gray-800 dark:text-slate-300 flex items-center gap-2">👤 <span id="modalSellerName"></span></p><p class="text-sm text-gray-800 dark:text-slate-300 flex items-center gap-2">📍 <span id="modalSellerLocation"></span></p><p class="text-sm text-gray-800 dark:text-slate-300 flex items-center gap-2">📞 <span id="modalSellerPhone"></span></p></div>
+      <div class="flex gap-3 pt-1"><a id="modalCallBtn" href="#" class="call-btn flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl text-center text-sm">📞 Call</a><a id="modalChatBtn" href="#" target="_blank" class="wa-btn flex-1 bg-green-600 text-white font-bold py-3 rounded-xl text-center text-sm">💬 WhatsApp</a></div>
+      <div id="modalStatusBadges" class="flex flex-wrap items-center gap-2"></div>
+      <div class="grid grid-cols-2 gap-2"><button onclick="openReportModal(window.currentModalItemId)" class="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-bold py-2.5 rounded-xl text-xs border border-red-200 dark:border-red-800">🚩 Report</button><button onclick="copyListingLink(window.currentModalItemId)" class="bg-gray-50 dark:bg-slate-700 text-gray-700 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs border border-gray-200 dark:border-slate-600">🔗 Copy Link</button></div>
+      <button onclick="verifyAndManage(window.currentModalItemId)" class="w-full mt-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs border border-transparent dark:border-slate-600">🔐 Manage Listing (Seller)</button>
+    </div>
+  </div>
+</div>
+
+<div id="sell-modal" class="fixed inset-0 z-[150] hidden items-start justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+  <div class="relative w-full max-w-2xl py-4 sm:py-8">
+    <section id="post-form" class="w-full">
+      <div class="bg-gradient-to-br from-orange-50 to-white dark:from-slate-800 dark:to-slate-800 rounded-2xl overflow-hidden shadow-2xl border border-orange-200 dark:border-slate-700">
+        <div class="sticky top-0 z-20 bg-gradient-to-r from-orange-500 to-orange-600 dark:from-slate-700 dark:to-slate-700 text-white p-4 sm:p-6 rounded-t-2xl shadow-md">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="text-xl sm:text-2xl font-extrabold flex items-center gap-2">📤 Post an Item</h2>
+              <p class="text-[11px] sm:text-xs mt-1 opacity-90">Reach thousands of buyers in Uganda – fast and free</p>
+            </div>
+            <button type="button" onclick="closeSellModal()" aria-label="Close" class="bg-white/20 hover:bg-white/30 active:scale-90 text-white rounded-full w-9 h-9 flex items-center justify-center text-2xl font-bold shrink-0 transition leading-none pb-1">&times;</button>
+          </div>
+        </div>
+        <form id="uploadForm" class="p-4 sm:p-6 space-y-4 sm:space-y-5">
+          <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Item Title</label><input type="text" id="title" placeholder="e.g. Samsung Galaxy S24 Ultra" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none" required/></div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Price (UGX)</label><input type="text" id="price" placeholder="850,000" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none" required/></div>
+            <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Category</label>
+              <select id="category" onchange="updateConditionOptions()" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none">
+                <option value="Electronics">📱 Electronics</option><option value="Phones">📲 Phones</option><option value="Computers">💻 Computers</option><option value="Fashion">👗 Fashion</option><option value="Clothes">👕 Clothes</option><option value="Home &amp; Kitchen">🏠 Home</option><option value="Beauty">💄 Beauty</option><option value="Sports">⚽ Sports</option><option value="Books">📚 Books</option><option value="Automotive">🚗 Automotive</option><option value="Services">🛠️ Services</option><option value="Agriculture">🌾 Agriculture</option><option value="Entertainment">🎬 Entertainment</option><option value="Kids">👶 Kids</option><option value="Toys">🧸 Toys</option><option value="Stationery">✏️ Stationery</option><option value="Food Stuffs">🍲 Food Stuffs</option><option value="Hardware">🔨 Hardware</option><option value="Lands">🏞️ Lands</option><option value="General" selected>📦 General</option>
+              </select></div>
+            <div><label id="conditionLabel" class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Condition</label>
+              <select id="condition" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none"><option value="Brand New">Brand New</option><option value="Used - Like New" selected>Used - Like New</option><option value="Used - Fair">Used - Fair</option><option value="Refurbished">Refurbished</option></select></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">WhatsApp Number</label><input type="tel" id="whatsapp" placeholder="e.g. 0757815xxx" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none" required/></div>
+            <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Secret PIN (for managing)</label><input type="password" id="passcode" placeholder="e.g. 1234" maxlength="6" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none" required/></div>
+          </div>
+          <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Location</label>
+            <select id="location" class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none"><option value="Kampala Central">Kampala Central</option><option value="Kampala, Makindye division">Kampala, Makindye division</option><option value="Kampala, Nakawa division">Kampala, Nakawa division</option><option value="Kampala, Kawempe division">Kampala, Kawempe division</option><option value="Kampala, Rubaga division">Kampala, Rubaga division</option><option value="Wakiso">Wakiso</option><option value="Jinja">Jinja</option><option value="Mbarara">Mbarara</option><option value="Gulu">Gulu</option><option value="Other districts/city">Other districts/city</option></select></div>
+          <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Description</label><textarea id="description" rows="3" placeholder="Describe your item..." class="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 text-sm bg-white dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none"></textarea></div>
+          <div><label class="block text-[11px] font-bold text-gray-600 dark:text-slate-400 uppercase mb-1">Images (Max 5)</label><input type="file" id="photos" accept="image/*" multiple required class="w-full text-sm dark:text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-orange-50 dark:file:bg-slate-700 file:text-orange-700 dark:file:text-orange-400 hover:file:bg-orange-100 dark:hover:file:bg-slate-600"/><div id="imagePreview" class="hidden gap-2 flex-wrap mt-2"></div></div>
+          <div class="flex gap-2 sm:gap-3 pt-2">
+            <button type="button" onclick="closeSellModal()" class="active:scale-95 flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-200 font-bold py-3 sm:py-4 rounded-xl transition">Cancel</button>
+            <button type="submit" id="submitBtn" class="active:scale-95 flex-[2] bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 sm:py-4 rounded-xl shadow-lg transition hover:scale-[1.01]">🚀 Publish Listing</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="job-details-modal" class="fixed inset-0 z-[120] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+  <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden my-auto border border-transparent dark:border-slate-700">
+    <div class="bg-indigo-600 dark:bg-indigo-800 text-white p-4 flex items-center justify-between"><h3 class="text-base font-bold">Job Details</h3><button onclick="closeJobDetails()" class="text-white text-xl font-bold">&times;</button></div>
+    <div class="p-5 space-y-4 text-sm max-h-[70vh] overflow-y-auto">
+      <div><h2 id="jd-title" class="text-xl font-black text-gray-900 dark:text-slate-100"></h2><p id="jd-company" class="text-sm font-semibold text-gray-600 dark:text-slate-400 mt-1"></p></div>
+      <div class="flex flex-wrap gap-2 text-xs"><span class="bg-indigo-50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded-md">📍 <span id="jd-location"></span></span><span class="bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-md">💰 <span id="jd-salary"></span></span><span class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 px-2 py-1 rounded-md">⏱️ <span id="jd-type"></span></span></div>
+      <div class="pt-3 border-t border-gray-100 dark:border-slate-700"><h4 class="font-bold text-gray-800 dark:text-slate-100 mb-2">Description & Requirements</h4><p id="jd-desc" class="text-gray-600 dark:text-slate-400 text-xs whitespace-pre-line"></p></div>
+      <div class="pt-4 border-t border-gray-100 dark:border-slate-700 flex gap-2"><a id="jd-contact" href="#" target="_blank" class="flex-1 bg-green-600 text-white font-bold py-2.5 rounded-xl text-center text-sm">💬 WhatsApp</a><button id="jd-apply-btn" class="flex-1 bg-indigo-600 dark:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm">📩 Apply Now</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="apply-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col border border-transparent dark:border-slate-700">
+    <div class="bg-indigo-600 dark:bg-indigo-800 text-white p-4 flex items-start justify-between"><div><h3 class="text-base font-bold">Apply for Job</h3><p id="apply-job-meta" class="text-[10px] text-indigo-100 truncate w-56"></p></div><button onclick="closeApplyModal()" class="text-white text-xl font-bold">&times;</button></div>
+    <form id="apply-form" onsubmit="submitApplication(event)" class="p-5 space-y-3 text-xs overflow-y-auto">
+      <div><label class="block font-bold text-gray-700 dark:text-slate-300 mb-1">Your Name *</label><input type="text" id="apply-name" required class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-600 rounded-xl outline-none dark:text-slate-100"/></div>
+      <div><label class="block font-bold text-gray-700 dark:text-slate-300 mb-1">Your Phone / WhatsApp *</label><input type="tel" id="apply-phone" required class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-600 rounded-xl outline-none dark:text-slate-100"/></div>
+      <div><label class="block font-bold text-gray-700 dark:text-slate-300 mb-1">Message</label><textarea id="apply-note" rows="4" class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-600 rounded-xl outline-none dark:text-slate-100 resize-y"></textarea></div>
+      <div class="bg-amber-50 dark:bg-amber-900/20 text-amber-900 dark:text-amber-200 p-3 rounded-xl flex gap-2 border border-transparent dark:border-amber-800/40">⚠️ <span><strong>Never pay for a job.</strong></span></div>
+      <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl mt-2">💬 Send via WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<div id="report-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[120] hidden items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl overflow-hidden border border-transparent dark:border-slate-700">
+    <div class="bg-red-600 dark:bg-red-800 text-white p-4 flex justify-between"><h3 class="text-sm font-bold">🚩 Report listing</h3><button onclick="closeReportModal()" class="text-white text-xl">&times;</button></div>
+    <form id="report-form" onsubmit="submitReport(event)" class="p-5 space-y-3 text-xs">
+      <select id="report-reason" required class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-600 rounded-xl outline-none dark:text-slate-100"><option value="">Choose reason…</option><option value="Scam / Fraud">Scam / Fraud</option><option value="Already sold">Already sold</option><option value="Wrong category">Wrong category</option><option value="Offensive content">Offensive content</option><option value="Other">Other</option></select>
+      <textarea id="report-note" rows="3" class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-600 rounded-xl outline-none dark:text-slate-100 dark:placeholder-slate-500" placeholder="Details..."></textarea>
+      <div class="flex justify-end gap-2"><button type="button" onclick="closeReportModal()" class="px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 font-bold rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-red-600 text-white font-bold rounded-xl">Send</button></div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+const SUPABASE_URL='https://lulijpkeslesdeyemada.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1bGlqcGtlc2xlc2RleWVtYWRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMjM1MDMsImV4cCI6MjEwMDg5OTUwM30.ptWL1GF5DrshvF6VhwIs3HjRiA_qWgVlux3uk61Hi_A';
+const catalog=document.getElementById('catalog');
+if(!window.supabase){if(catalog)catalog.innerHTML='<p class="col-span-full text-center text-red-500 py-10">⚠️ DB load failed.</p>';}else{window.supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}
+let _compressor;async function getCompressor(){if(_compressor!==undefined)return _compressor;try{const mod=await import('https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.mjs');_compressor=mod.default||mod;}catch(e){_compressor=false;}return _compressor;}
+const esc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const FALLBACK_IMG='https://placehold.co/400x300/ffedd5/f97316?text=No+Image';
+function getImageList(item){let raw=item?.image_urls;if(typeof raw==='string'){const s=raw.trim();if(s.startsWith('[')){try{raw=JSON.parse(s);}catch{raw=null;}}else if(s.startsWith('{')&&s.endsWith('}')){raw=s.slice(1,-1).split(',').map(x=>x.replace(/^"(.*)"$/,'$1').trim());}else{raw=s?[s]:null;}}let list=Array.isArray(raw)?raw.filter(u=>typeof u==='string'&&u.trim()):[];if(!list.length&&item?.image_url)list=[item.image_url];return list;}
+let currentCategory='All',currentLocation='All',currentSort='newest',currentMinPrice=null,currentMaxPrice=null,currentIncludeSold=false,allProducts=[];window._currentCategory='All';window._currentLocation='All';
+const sectionTitle=document.getElementById('sectionTitle'),itemCount=document.getElementById('itemCount'),toast=document.getElementById('toast'),toastMsg=document.getElementById('toastMessage'),toastIcon=document.getElementById('toastIcon'),form=document.getElementById('uploadForm'),submitBtn=document.getElementById('submitBtn'),fileInput=document.getElementById('photos'),previewContainer=document.getElementById('imagePreview'),searchInput=document.getElementById('searchInput'),mobileSearchInput=document.getElementById('mobileSearchInput');
+const FAV_KEY='shophub_favs',getFavs=()=>{try{return JSON.parse(localStorage.getItem(FAV_KEY)||'[]')}catch{return[]}},saveFavs=(a)=>{try{localStorage.setItem(FAV_KEY,JSON.stringify(a))}catch{}};
+window.toggleFavourite=(id,el)=>{id=String(id);let f=getFavs();const has=f.includes(id);f=has?f.filter(x=>x!==id):[...f,id];saveFavs(f);if(el){el.classList.toggle('saved',!has);el.textContent=has?'🤍':'❤️';}};
+window.shareProduct=async(id)=>{const item=allProducts.find(i=>String(i.id)===String(id));if(!item)return;const url=`${location.origin}/product/${encodeURIComponent(item.id)}/${window.shSlug?window.shSlug(item.title):String(item.title||'listing').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}`;const text=`${item.title} — UGX ${Number(String(item.price||'').replace(/\D/g,'')||0).toLocaleString()} on ShopHub`;try{if(navigator.share)await navigator.share({title:'ShopHub',text,url});else{await navigator.clipboard.writeText(`${text}\n${url}`);showToast('Link copied!','🔗');}}catch(_){}};
+window.copyListingLink=async function(id){const item=allProducts.find(i=>String(i.id)===String(id));if(!item)return;const url=`${location.origin}/product/${encodeURIComponent(item.id)}/${window.shSlug?window.shSlug(item.title):String(item.title||'listing').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}`;try{await navigator.clipboard.writeText(url);showToast('Link copied','🔗');}catch{showToast('Copy failed','❌');}};
+const priceInputEl=document.getElementById('price');priceInputEl?.addEventListener('input',(e)=>{const raw=e.target.value.replace(/[^\d]/g,'');e.target.value=raw?Number(raw).toLocaleString():'';});
+let toastTimeout;function showToast(message,icon='✅'){toastMsg.textContent=message;toastIcon.textContent=icon;toast.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.classList.remove('show'),3500);}window.showToast=showToast;
+const MAX_IMAGES=5;fileInput?.addEventListener('change',()=>{const files=Array.from(fileInput.files||[]).slice(0,MAX_IMAGES);previewContainer.innerHTML='';if(files.length){previewContainer.classList.remove('hidden');previewContainer.classList.add('flex');files.forEach((file)=>{const reader=new FileReader();reader.onload=(ev)=>{const img=document.createElement('img');img.src=ev.target.result;img.className='w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-slate-600';previewContainer.appendChild(img);};reader.readAsDataURL(file);});}else{previewContainer.classList.add('hidden');previewContainer.classList.remove('flex');}});
+
+window.updateConditionOptions=function(){const cat=document.getElementById('category').value,condSelect=document.getElementById('condition'),condLabel=document.getElementById('conditionLabel');if(cat==='Services'){condLabel.innerText='Service Status';condSelect.innerHTML='<option value="Available / Active" selected>Available / Active</option><option value="Available for Hire / Booking">Available for Hire / Booking</option><option value="Negotiable">Negotiable</option>';}else if(cat==='Lands'){condLabel.innerText='Land Tenure / Size';condSelect.innerHTML='<option value="Mailo Land" selected>Mailo Land</option><option value="Title">Title</option><option value="Lease">Lease</option><option value="Freehold">Freehold</option><option value="50x100">50x100</option><option value="50x50">50x50</option><option value="Others">Others</option>';}else{condLabel.innerText='Condition';condSelect.innerHTML='<option value="Brand New">Brand New</option><option value="Used - Like New" selected>Used - Like New</option><option value="Used - Fair">Used - Fair</option><option value="Refurbished">Refurbished</option>';}};
+
+function renderProducts(products){
+  if(!products.length){const catLabel=currentCategory==='All'?'ShopHub':currentCategory;catalog.innerHTML=`<div class="col-span-full bg-orange-50 dark:bg-slate-800 rounded-2xl p-8 text-center border-2 border-dashed border-orange-200 dark:border-slate-700"><div class="text-6xl mb-3">🛍️</div><h3 class="text-xl font-black text-orange-900 dark:text-slate-100">Be the first to post in ${esc(catLabel)}!</h3><p class="text-orange-700 dark:text-slate-400 text-sm mt-2">No listings here yet.</p><button onclick="openSellModal()" class="inline-flex items-center gap-2 mt-5 bg-orange-500 text-white font-black px-7 py-3.5 rounded-full shadow-lg transition hover:scale-105"><span class="text-lg">+</span> Post the First Item</button></div>`;itemCount.textContent='0 items';return;}
+  const favs=getFavs();
+  catalog.innerHTML=products.map((item)=>{
+    const img=getImageList(item)[0]||FALLBACK_IMG,phone=window.normalizePhone(item.whatsapp),isFav=favs.includes(String(item.id)),views=Number(item.views||0),status=(item.status||'available').toLowerCase();
+    return`<div class="product-card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-slate-700 cursor-pointer" onclick="openProductModalById('${esc(item.id)}')"><a class="sr-only" href="/product/${encodeURIComponent(item.id)}/${window.shSlug(item.title)}">View ${esc(item.title)}</a><div class="relative overflow-hidden"><img src="${esc(img)}" class="card-img w-full h-40 sm:h-44 object-cover ${status==='sold'?'grayscale opacity-75':''}" loading="lazy" onerror="this.src='${FALLBACK_IMG}';"/><span class="absolute top-2 left-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full z-10">📍 ${esc(item.location)}</span><span class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full z-10">${esc(item.condition)}</span>${status==='sold'?`<span class="absolute inset-x-0 top-1/2 -translate-y-1/2 bg-red-600/90 text-white text-center text-xs font-black py-1.5 z-10">SOLD</span>`:''}<div class="card-actions"><button class="card-action-btn ${isFav?'saved':''}" onclick="event.stopPropagation();toggleFavourite('${esc(item.id)}',this)">${isFav?'❤️':'🤍'}</button><button class="card-action-btn" onclick="event.stopPropagation();shareProduct('${esc(item.id)}')">📤</button></div>${views>0?`<span class="views-badge">👁️ ${views}</span>`:''}</div><div class="p-3 space-y-2"><h3 class="font-bold text-sm text-gray-800 dark:text-slate-100 line-clamp-2"><a href="/product/${encodeURIComponent(item.id)}/${window.shSlug(item.title)}" class="hover:text-orange-600" onclick="event.preventDefault();event.stopPropagation();openProductModalById('${esc(item.id)}')">${esc(item.title)}</a></h3><p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-2">${esc(item.description)}</p><p class="text-orange-600 dark:text-orange-400 font-black text-lg">${Number(String(item.price||0).replace(/[^\d]/g,'')||0).toLocaleString()}</p><div class="flex gap-2 pt-1"><a href="tel:${phone}" onclick="event.stopPropagation()" class="bg-blue-600 text-white text-xs font-bold py-2 rounded-lg text-center flex-1">📞 Call</a><a href="${phone ? `https://wa.me/${phone}` : '#'}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();if(!this.href||this.getAttribute('href')==='#'){event.preventDefault();showToast('Seller has not provided a valid WhatsApp number','⚠️')}" class="bg-green-600 text-white text-xs font-bold py-2 rounded-lg text-center flex-1">💬 Chat</a></div></div></div>`;
+  }).join('');
+  itemCount.textContent=`${products.length} item${products.length>1?'s':''}`;
+}
+
+window.openProductModalById=function(id){
+  const item=allProducts.find(i=>String(i.id)===String(id));
+  if(!item)return;
+  // Set the address directly in the product click handler, not only in the SEO wrapper.
+  // This keeps the URL descriptive even if another handler opens the modal first.
+  try{
+    const slug=window.shSlug?window.shSlug(item.title):String(item.title||'listing').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,75)||'listing';
+    const url='/product/'+encodeURIComponent(item.id)+'/'+slug;
+    if(location.pathname!==url)history.pushState({shophubProduct:true},'',url);
+  }catch(_){}
+  window.openProductModal(item);
+};
+const FULL_COLS='id,title,price,price_num,category,whatsapp,location,condition,description,image_url,image_urls,views,status,created_at',MIN_COLS='id,title,price,price_num,category,whatsapp,location,condition,description,image_url,image_urls,status,created_at';
+async function fetchListings(category='All',location='All'){
+  if(!window.supabaseClient)return;
+  catalog.innerHTML=Array.from({length:8},()=>`<div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm"><div class="skeleton h-44 w-full"></div><div class="p-3 space-y-2"><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-1/2"></div></div></div>`).join('');
+  const build=(cols)=>{let q=window.supabaseClient.from('listings').select(cols);if(category!=='All')q=q.eq('category',category);if(location!=='All')q=q.eq('location',location);if(!currentIncludeSold)q=q.neq('status','sold');if(currentMinPrice!=null)q=q.gte('price_num',currentMinPrice);if(currentMaxPrice!=null)q=q.lte('price_num',currentMaxPrice);switch(currentSort){case'price-asc':q=q.order('price_num',{ascending:true});break;case'price-desc':q=q.order('price_num',{ascending:false});break;case'views':q=q.order('views',{ascending:false});break;default:q=q.order('created_at',{ascending:false});}return q;};
+  let{data,error}=await build(FULL_COLS);if(error)({data,error}=await build(MIN_COLS));
+  if(error){catalog.innerHTML=`<p class="text-center text-red-400 py-10">Error loading.</p>`;return;}
+  allProducts=data||[];renderProducts(allProducts);
+  if(window._pendingDeepLink){const item=allProducts.find(i=>String(i.id)===String(window._pendingDeepLink));if(item){window.openProductModal(item);window._pendingDeepLink=null;}}
+}
+window.fetchListings=fetchListings;
+window.applyFilters=function(){currentLocation=document.getElementById('locationFilter').value;currentSort=document.getElementById('sortFilter').value;currentIncludeSold=document.getElementById('showSoldToggle').checked;const mn=document.getElementById('priceMin').value.trim(),mx=document.getElementById('priceMax').value.trim();currentMinPrice=mn===''?null:Number(mn);currentMaxPrice=mx===''?null:Number(mx);window._currentLocation=currentLocation;fetchListings(currentCategory,currentLocation);};
+window.clearPriceRange=function(){document.getElementById('priceMin').value='';document.getElementById('priceMax').value='';applyFilters();};
+window.searchProducts=async function(){const q=searchInput.value.trim();if(!q){filterCategory(currentCategory);return;}sectionTitle.textContent=`🔎 Results for "${q}"`;if(!window.supabaseClient){renderProducts([]);return;}catalog.innerHTML=Array.from({length:4},()=>`<div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm"><div class="skeleton h-44 w-full"></div><div class="p-3 space-y-2"><div class="skeleton h-4 w-3/4"></div></div></div>`).join('');const{data,error}=await window.supabaseClient.from('listings').select(FULL_COLS).or(`title.ilike.%${q}%,description.ilike.%${q}%,category.ilike.%${q}%`).neq('status','sold').order('created_at',{ascending:false}).limit(80);if(error){renderProducts([]);return;}allProducts=data||[];renderProducts(allProducts);};
+window.searchProductsMobile=async function(){const q=mobileSearchInput.value.trim();if(!q){filterCategory(currentCategory);return;}sectionTitle.textContent=`🔎 Results for "${q}"`;if(!window.supabaseClient){renderProducts([]);return;}const{data,error}=await window.supabaseClient.from('listings').select(FULL_COLS).or(`title.ilike.%${q}%,description.ilike.%${q}%,category.ilike.%${q}%`).neq('status','sold').order('created_at',{ascending:false}).limit(80);if(error){renderProducts([]);return;}allProducts=data||[];renderProducts(allProducts);};
+window.filterCategory=function(cat){currentCategory=cat;window._currentCategory=cat;if(searchInput)searchInput.value='';if(mobileSearchInput)mobileSearchInput.value='';sectionTitle.textContent=cat==='All'?'🛍️ All Listings':`📂 ${cat} Listings`;document.querySelectorAll('.cat-btn').forEach(btn=>{btn.classList.remove('active','bg-white/20','text-white');btn.classList.add('text-white/80');const txt=btn.textContent.trim();if((cat==='All'&&txt.includes('All'))||txt.includes(cat)){btn.classList.add('active','bg-white/20','text-white');btn.classList.remove('text-white/80');}});fetchListings(cat,currentLocation);};
+
+form?.addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const title=document.getElementById('title').value.trim(),price=document.getElementById('price').value.replace(/[^\d]/g,''),category=document.getElementById('category').value,whatsapp=window.normalizePhone(document.getElementById('whatsapp').value.trim()),location=document.getElementById('location').value,condition=document.getElementById('condition').value,passcode=document.getElementById('passcode').value.trim(),description=document.getElementById('description').value.trim(),files=Array.from(fileInput.files||[]).slice(0,MAX_IMAGES);
+  if(!title||!price||!whatsapp||files.length===0){showToast('Fill all fields and select an image','⚠️');return;}
+  submitBtn.disabled=true;submitBtn.innerHTML='⏳ Uploading...';
+  try{const imageUrls=[];for(let i=0;i<files.length;i++){const file=files[i];let compressedFile=file;const compress=await getCompressor();if(compress){try{compressedFile=await compress(file,{maxSizeMB:0.5,maxWidthOrHeight:1200,useWebWorker:true,fileType:'image/jpeg'});}catch(_){}}const safeName=(file.name||'photo.jpg').replace(/[^\w.\-]+/g,'_');const fileName=`${Date.now()}_${i}_${safeName}`;const{error:uploadError}=await window.supabaseClient.storage.from('item-photos').upload(fileName,compressedFile);if(uploadError){showToast('Upload failed','❌');submitBtn.disabled=false;submitBtn.innerHTML='🚀 Publish Listing';return;}const{data:urlData}=window.supabaseClient.storage.from('item-photos').getPublicUrl(fileName);imageUrls.push(urlData.publicUrl);}const{error:dbError}=await window.supabaseClient.from('listings').insert([{title,price,price_num:Number(price)||0,category,whatsapp,location,condition,passcode,description,image_urls:imageUrls,image_url:imageUrls[0]||null,status:'available'}]);if(dbError){showToast('DB error: '+dbError.message,'❌');}else{showToast(`🎉 Item published!`,'✅');form.reset();fileInput.value='';previewContainer.innerHTML='';previewContainer.classList.add('hidden');updateConditionOptions();fetchListings(currentCategory,currentLocation);closeSellModal();window.scrollTo({top:0,behavior:'smooth'});}}catch(err){showToast('Error: '+err.message,'❌');}
+  submitBtn.disabled=false;submitBtn.innerHTML='🚀 Publish Listing';
+});
+
+window.currentModalItemId=null;
+window.openProductModal=function(item){
+  window.currentModalItemId=item.id;const modal=document.getElementById('productModal'),box=document.getElementById('productModalBox');let images=getImageList(item);if(!images.length)images=[FALLBACK_IMG];
+  document.getElementById('modalMainImage').src=images[0];const thumbWrap=document.getElementById('modalThumbs');
+  if(images.length>1){thumbWrap.classList.remove('hidden');thumbWrap.innerHTML=images.map((src,i)=>`<img src="${esc(src)}" onclick="document.getElementById('modalMainImage').src='${esc(src)}'" class="w-16 h-16 object-cover rounded-lg border-2 cursor-pointer ${i===0?'border-orange-500':'border-transparent'}"/>`).join('');}else{thumbWrap.innerHTML='';thumbWrap.classList.add('hidden');}
+  document.getElementById('modalLocationBadge').innerText='📍 '+(item.location||'Uganda');document.getElementById('modalConditionBadge').innerText=item.condition||'Brand New';
+  document.getElementById('modalTitle').innerText=item.title;document.getElementById('modalPrice').innerText='UGX '+Number(String(item.price||0).replace(/[^\d]/g,'')||0).toLocaleString();document.getElementById('modalDescription').innerText=item.description||'No details.';
+  document.getElementById('modalSellerName').innerText='ShopHub Seller';document.getElementById('modalSellerLocation').innerText=item.location;document.getElementById('modalSellerPhone').innerText=item.whatsapp;
+  const phone=window.normalizePhone(item.whatsapp);document.getElementById('modalCallBtn').href=`tel:${phone}`;document.getElementById('modalChatBtn').href=phone?`https://wa.me/${phone}`:'#';document.getElementById('modalChatBtn').onclick=function(e){if(!phone){e.preventDefault();showToast('Seller has not provided a valid WhatsApp number','⚠️');}};
+  const status=(item.status||'').toLowerCase(),badgesWrap=document.getElementById('modalStatusBadges');badgesWrap.innerHTML='';if(status==='reserved')badgesWrap.innerHTML+=`<span class="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 text-[10px] px-2.5 py-1 rounded-full">⏳ Reserved</span>`;if(status==='sold')badgesWrap.innerHTML+=`<span class="bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 text-[10px] px-2.5 py-1 rounded-full">🔴 Sold</span>`;
+  if(status==='sold'){document.getElementById('modalCallBtn').style.pointerEvents='none';document.getElementById('modalCallBtn').style.opacity='0.5';document.getElementById('modalChatBtn').style.pointerEvents='none';document.getElementById('modalChatBtn').style.opacity='0.5';}
+  modal.classList.remove('hidden');modal.classList.add('flex');document.body.style.overflow='hidden';requestAnimationFrame(()=>box.classList.remove('translate-y-full'));
+  // Clean product URLs are managed by the ShopHub routing layer below.
+  try{document.title=`${item.title} — ShopHub`;}catch(_){}
+  (async()=>{try{const c=window.supabaseClient;if(!c)return;const{data}=await c.from('listings').select('views').eq('id',item.id).single();const nv=Number(data?.views||0)+1;await c.from('listings').update({views:nv}).eq('id',item.id);item.views=nv;}catch(_){}})();
+};
+window.closeProductModal=function(){const modal=document.getElementById('productModal'),box=document.getElementById('productModalBox');if(!modal||!box)return;box.classList.add('translate-y-full');setTimeout(()=>{modal.classList.add('hidden');modal.classList.remove('flex');document.body.style.overflow='';try{if(/^\/product\//.test(location.pathname))history.replaceState({},'','/');document.title="ShopHub — Uganda's Marketplace";}catch(_){}},250);};
+document.getElementById('productModal')?.addEventListener('click',(e)=>{if(e.target.id==='productModal')window.closeProductModal();});
+
+window.openSellModal=function(){const modal=document.getElementById('sell-modal');if(!modal)return;modal.classList.remove('hidden');modal.classList.add('flex');document.body.style.overflow='hidden';const card=document.getElementById('post-form');if(card){card.classList.remove('sell-modal-pop');void card.offsetWidth;card.classList.add('sell-modal-pop');}};
+window.closeSellModal=function(){const modal=document.getElementById('sell-modal');if(!modal)return;modal.classList.add('hidden');modal.classList.remove('flex');document.body.style.overflow='';};
+document.getElementById('sell-modal')?.addEventListener('click',(e)=>{if(e.target.id==='sell-modal')window.closeSellModal();});
+
+document.addEventListener('keydown',(e)=>{
+  if(e.key!=='Escape')return;
+  const sell=document.getElementById('sell-modal');
+  if(sell && !sell.classList.contains('hidden')){window.closeSellModal();return;}
+  const prod=document.getElementById('productModal');
+  if(prod && !prod.classList.contains('hidden')){window.closeProductModal();return;}
+  const jd=document.getElementById('job-details-modal');
+  if(jd && !jd.classList.contains('hidden')){window.closeJobDetails&&window.closeJobDetails();return;}
+  const ap=document.getElementById('apply-modal');
+  if(ap && !ap.classList.contains('hidden')){window.closeApplyModal&&window.closeApplyModal();return;}
+  const rp=document.getElementById('report-modal');
+  if(rp && !rp.classList.contains('hidden')){window.closeReportModal&&window.closeReportModal();return;}
+  const pin=document.getElementById('pinOverlay');
+  if(pin){pin.remove();}
+});
+</script>
+
+<script>
+if(localStorage.getItem('theme')==='dark'||(!('theme'in localStorage)&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');document.getElementById('darkModeToggle').innerText='☀️';}else{document.documentElement.classList.remove('dark');document.getElementById('darkModeToggle').innerText='🌙';}
+window.toggleDarkMode=function(){document.documentElement.classList.toggle('dark');const isDark=document.documentElement.classList.contains('dark');localStorage.setItem('theme',isDark?'dark':'light');document.getElementById('darkModeToggle').innerText=isDark?'☀️':'🌙';};
+
+window.currentActiveView='marketplace';
+function switchView(viewName){
+  if(!['marketplace','jobs'].includes(viewName))viewName='marketplace';window.currentActiveView=viewName;
+  document.querySelectorAll('.page-view').forEach(el=>el.classList.add('hidden'));const target=document.getElementById(`view-${viewName}`);if(target)target.classList.remove('hidden');
+  if(!/^\/(product|jobs)\/[^/]+/.test(location.pathname)){history.replaceState(null,'',viewName==='jobs'?'/jobs':'/');}window.scrollTo(0,0);
+  const btn=document.getElementById('floatingSellBtn');if(btn){if(viewName==='jobs')btn.classList.add('hidden');else btn.classList.remove('hidden');}
+  if(viewName==='jobs'&&typeof loadJobsFromSupabase==='function')loadJobsFromSupabase();
+}
+window.switchView=switchView;
+function toggleJobMarket(market){const tabU=document.getElementById('tab-uganda'),tabI=document.getElementById('tab-international'),feedU=document.getElementById('uganda-jobs-list'),feedI=document.getElementById('international-jobs-list');if(market==='uganda'){tabU.className="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";tabI.className="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-white/80";feedU.classList.remove('hidden');feedI.classList.add('hidden');}else{tabI.className="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";tabU.className="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-white/80";feedI.classList.remove('hidden');feedU.classList.add('hidden');}}
+window.toggleJobMarket=toggleJobMarket;
+const jobEsc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+window._allJobs=[];
+async function loadJobsFromSupabase(){
+  const client=window.supabaseClient,listU=document.getElementById('uganda-jobs-list'),listI=document.getElementById('international-jobs-list');if(!listU||!listI)return;
+  const skel=`<div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700 shadow-sm"><div class="skeleton h-4 w-24 mb-3"></div><div class="skeleton h-5 w-3/4 mb-2"></div></div>`;listU.innerHTML=skel;listI.innerHTML=skel;
+  if(!client)return;const{data:jobs,error}=await client.from('jobs').select('*').order('created_at',{ascending:false});
+  if(error){listU.innerHTML='<p class="text-red-500">Failed to load.</p>';listI.innerHTML='';return;}
+  window._allJobs=jobs||[];listU.innerHTML='';listI.innerHTML='';
+  if(!jobs||jobs.length===0){listU.innerHTML='<p class="text-gray-500 dark:text-slate-400 text-xs">No local jobs yet.</p>';listI.innerHTML='';return;}
+  const badge=document.getElementById('jobsCountBadge');badge.textContent=jobs.length;badge.classList.remove('hidden');
+  jobs.forEach(job=>{const isIntl=job.market==='international',jobId=jobEsc(job.id);const cardHTML=`<div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700 shadow-sm border-l-4 ${isIntl?'border-l-indigo-500':'border-l-sky-500'}"><div class="flex justify-between items-start gap-2"><div><span class="text-[10px] font-bold px-2 py-0.5 rounded ${isIntl?'bg-violet-100 dark:bg-violet-900/40 text-violet-800 dark:text-violet-300':'bg-sky-100 dark:bg-sky-900/40 text-sky-800 dark:text-sky-300'} mb-2 block w-max">${isIntl?'International':'Uganda'} • ${jobEsc(job.job_type)}</span><h3 class="text-base font-bold text-gray-900 dark:text-slate-100"><a href="/jobs/${encodeURIComponent(job.id)}/${window.shSlug(job.title)}" class="hover:text-orange-600" onclick="event.stopPropagation()">${jobEsc(job.title)}</a></h3><p class="text-xs text-gray-500 dark:text-slate-400">${jobEsc(job.company)} &bull; ${jobEsc(job.location)}</p></div><span class="text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded border border-transparent dark:border-emerald-800">${jobEsc(job.salary||'Negotiable')}</span></div><p class="text-xs text-gray-600 dark:text-slate-300 mt-3 line-clamp-2">${jobEsc(job.description)}</p><div class="mt-4 pt-3 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-xs"><span class="text-gray-400 dark:text-slate-500">${new Date(job.created_at).toLocaleDateString()}</span><div class="flex gap-2"><button onclick="openJobDetails('${jobId}')" class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 font-bold px-3 py-1.5 rounded-lg">👁️ View</button><button onclick="openApplyModal('${jobId}')" class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg">📩 Apply</button></div></div></div>`;if(job.market==='uganda')listU.innerHTML+=cardHTML;else if(isIntl)listI.innerHTML+=cardHTML;});
+}
+window.loadJobsFromSupabase=loadJobsFromSupabase;
+window.openJobDetails=function(jobId){const job=window._allJobs.find(j=>String(j.id)===String(jobId));if(!job)return;document.getElementById('jd-title').innerText=job.title;document.getElementById('jd-company').innerText=job.company;document.getElementById('jd-location').innerText=job.location;document.getElementById('jd-salary').innerText=job.salary||'Negotiable';document.getElementById('jd-type').innerText=job.job_type;document.getElementById('jd-desc').innerText=job.description||'No description.';const jobPhone=window.normalizePhone(job.whatsapp);document.getElementById('jd-contact').href=jobPhone?`https://wa.me/${jobPhone}`:'#';document.getElementById('jd-contact').onclick=function(e){if(!jobPhone){e.preventDefault();showToast('Employer has not provided a valid WhatsApp number','⚠️');}};document.getElementById('jd-apply-btn').onclick=()=>{closeJobDetails();openApplyModal(jobId);};const modal=document.getElementById('job-details-modal');modal.classList.remove('hidden');modal.classList.add('flex');document.body.style.overflow='hidden';};
+window.closeJobDetails=function(){const m=document.getElementById('job-details-modal');m.classList.add('hidden');m.classList.remove('flex');document.body.style.overflow='';};
+document.getElementById('job-details-modal').addEventListener('click',(e)=>{if(e.target.id==='job-details-modal')window.closeJobDetails();});
+
+window._currentApplyJob=null;
+window.openApplyModal=function(jobId){const job=(window._allJobs||[]).find(j=>String(j.id)===String(jobId));if(!job){showToast('Job not found','❌');return;}window._currentApplyJob=job;document.getElementById('apply-job-meta').textContent=`${job.title} • ${job.company}`;document.getElementById('apply-note').value=`Hello ${job.company},\n\nI'm interested in the "${job.title}" role.\n\n`;const modal=document.getElementById('apply-modal');modal.classList.remove('hidden');modal.classList.add('flex');document.getElementById('apply-name').focus();};
+window.closeApplyModal=function(){const m=document.getElementById('apply-modal');m.classList.add('hidden');m.classList.remove('flex');document.getElementById('apply-form').reset();window._currentApplyJob=null;};
+window.submitApplication=async function(e){e.preventDefault();const job=window._currentApplyJob;if(!job)return;const name=document.getElementById('apply-name').value.trim(),phone=document.getElementById('apply-phone').value.trim(),note=document.getElementById('apply-note').value.trim();if(!name||!phone){showToast('Fill name and phone','⚠️');return;}const employerPhone=window.normalizePhone(job.whatsapp);if(!employerPhone){showToast('This employer has no valid WhatsApp number listed. Please contact the employer another way.','⚠️');return;}const waTab=window.open('about:blank','_blank');try{if(window.supabaseClient)await window.supabaseClient.from('applications').insert([{job_id:job.id,job_title:job.title,employer_company:job.company,applicant_name:name,applicant_phone:phone,note:note}]);}catch(e){}const url=`https://wa.me/${employerPhone}?text=${encodeURIComponent(note+`\n\n───\n👤 ${name}\n📞 ${phone}\n— via ShopHub`)}`;if(waTab){waTab.location.href=url;}else{showToast('Your browser blocked the WhatsApp popup. Tap the employer WhatsApp button to continue.','⚠️');}showToast('Opening WhatsApp…','💬');closeApplyModal();};
+document.addEventListener('click',(e)=>{if(e.target.id==='apply-modal')closeApplyModal();});
+
+window._reportListingId=null;
+window.openReportModal=function(id){window._reportListingId=id;const m=document.getElementById('report-modal');m.classList.remove('hidden');m.classList.add('flex');};
+window.closeReportModal=function(){document.getElementById('report-modal').classList.add('hidden');document.getElementById('report-modal').classList.remove('flex');document.getElementById('report-form').reset();window._reportListingId=null;};
+window.submitReport=async function(e){e.preventDefault();const reason=document.getElementById('report-reason').value,note=document.getElementById('report-note').value.trim();if(!reason||!window._reportListingId)return;try{await window.supabaseClient.from('listing_reports').insert([{listing_id:window._reportListingId,reason,note}]);}catch(err){}closeReportModal();showToast('Report submitted','🚩');};
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const _hash=window.location.hash,_params=new URLSearchParams(location.search);
+  switchView(_hash.replace('#','')==='jobs'?'jobs':'marketplace');
+  toggleJobMarket('uganda');
+  const hm=_hash.match(/^#listing-(.+)$/),pm=_params.get('item');
+  if(hm)window._pendingDeepLink=hm[1];else if(pm)window._pendingDeepLink=pm; // Legacy links remain supported and will be upgraded after the listing loads.
+  if(window.fetchListings)window.fetchListings(window._currentCategory||'All',window._currentLocation||'All');
+  if(typeof loadJobsFromSupabase==='function')setTimeout(()=>{if(window.currentActiveView!=='jobs')loadJobsFromSupabase();},800);
+  const btn=document.getElementById('floatingSellBtn');if(window.currentActiveView==='jobs')btn.classList.add('hidden');else btn.classList.remove('hidden');
+});
+</script>
+
+<script>
+let _pinResolve=null;
+function askPin(actionLabel){return new Promise((resolve)=>{_pinResolve=resolve;const overlay=document.createElement('div');overlay.className='pin-modal-overlay';overlay.id='pinOverlay';overlay.innerHTML=`<div class="pin-modal-box"><div style="font-size:40px;margin-bottom:6px;">🔐</div><h3>${actionLabel}</h3><p>Enter your PIN</p><input type="password" inputmode="numeric" maxlength="6" class="pin-input" id="pinInput" placeholder="••••" autofocus /><div class="pin-btn-row"><button class="pin-btn cancel" onclick="closePinModal(null)">Cancel</button><button class="pin-btn confirm" onclick="submitPinModal()">Confirm</button></div></div>`;document.body.appendChild(overlay);const input=document.getElementById('pinInput');input.focus();input.addEventListener('keydown',(e)=>{if(e.key==='Enter')submitPinModal();if(e.key==='Escape')closePinModal(null);});overlay.addEventListener('click',(e)=>{if(e.target.id==='pinOverlay')closePinModal(null);});});}
+function submitPinModal(){const v=document.getElementById('pinInput')?.value?.trim()||'';closePinModal(v);}
+function closePinModal(v){document.getElementById('pinOverlay')?.remove();if(_pinResolve){_pinResolve(v);_pinResolve=null;}}
+async function verifyAndManage(id){const pin=await askPin('Verify Ownership');if(!pin)return;const client=window.supabaseClient;if(!client){alert('Not ready.');return;}const{data,error}=await client.from('listings').select('passcode,title').eq('id',id).single();if(error||!data){alert('Not found.');return;}if(String(data.passcode)!==String(pin)){alert('❌ Wrong PIN.');return;}const choice=prompt(`✅ Verified: "${data.title}"\n\nType:\nA → Available\nR → Reserved\nS → Sold\nE → Edit price\nD → Delete\nC → Cancel`,'C');if(!choice)return;const c=choice.trim().toUpperCase();const statusMap={A:'available',R:'reserved',S:'sold'};if(statusMap[c]){const newStatus=statusMap[c];await client.from('listings').update({status:newStatus}).eq('id',id);alert(`✅ Status: ${newStatus}`);if(typeof fetchListings==='function')fetchListings(window._currentCategory||'All',window._currentLocation||'All');window.closeProductModal?.();return;}if(c==='D'){if(!confirm('⚠️ Delete permanently?'))return;await client.from('listings').delete().eq('id',id);alert('🗑️ Deleted.');if(typeof fetchListings==='function')fetchListings(window._currentCategory||'All',window._currentLocation||'All');window.closeProductModal?.();}else if(c==='E'){const newPrice=prompt('New price (UGX):');if(!newPrice)return;const clean=String(newPrice).replace(/[^\d]/g,'');if(!clean){alert('Invalid.');return;}await client.from('listings').update({price:clean,price_num:Number(clean)||0}).eq('id',id);alert('✅ Updated.');if(typeof fetchListings==='function')fetchListings(window._currentCategory||'All',window._currentLocation||'All');}}
+window.verifyAndManage=verifyAndManage;
+</script>
+
+<script>function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,ti,sw,fr,ar,zh-CN,es',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');}</script>
+<script defer src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>(async function(){const el=document.getElementById('visitor-count');if(!el)return;try{const res=await fetch('https://tallywire.cronpulse.workers.dev/hit/shophub-uganda-2026/pageviews');if(!res.ok)throw new Error();const data=await res.json();if(typeof data.value!=='number')throw new Error();el.innerText=Number(data.value).toLocaleString();}catch(e){try{let localCount=parseInt(localStorage.getItem('shophub_local_views')||'0',10);localCount+=1;localStorage.setItem('shophub_local_views',String(localCount));el.innerText=localCount.toLocaleString();}catch(_){el.innerText='—';}}})();</script>
+
+<script>
+/* ShopHub clean URL routing and per-listing metadata */
+(function(){
+  const BASE=location.origin;
+  const SEO_BASE='https://shhop.netlify.app';
+  window.shSlug=function(value){
+    return String(value||'listing').normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+      .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,75)||'listing';
+  };
+  function routeInfo(){
+    const p=decodeURIComponent(location.pathname);
+    let m=p.match(/^\/product\/([^/]+)(?:\/([^/]+))?\/?$/);
+    if(m)return {type:'product',id:m[1],slug:m[2]||''};
+    m=p.match(/^\/jobs\/([^/]+)(?:\/([^/]+))?\/?$/);
+    if(m)return {type:'job',id:m[1],slug:m[2]||''};
+    if(/^\/jobs\/?$/.test(p))return {type:'jobs'};
+    if(/^\/category\/([^/]+)\/?$/.test(p))return {type:'category',slug:p.match(/^\/category\/([^/]+)/)[1]};
+    return {type:'home'};
+  }
+  function setMeta(title,description,url,image){
+    document.title=title;
+    let desc=document.querySelector('meta[name="description"]');
+    if(!desc){desc=document.createElement('meta');desc.name='description';document.head.appendChild(desc);}
+    desc.content=String(description||'ShopHub Uganda marketplace listings and jobs.').replace(/\s+/g,' ').slice(0,155);
+    let can=document.querySelector('link[rel="canonical"]');
+    if(!can){can=document.createElement('link');can.rel='canonical';document.head.appendChild(can);}
+    can.href=url.startsWith(BASE) ? SEO_BASE + url.slice(BASE.length) : url;
+    const canonicalUrl=url.startsWith(BASE) ? SEO_BASE + url.slice(BASE.length) : url;
+    [['og:title',title],['og:description',desc.content],['og:url',canonicalUrl],['og:type','website'],['og:image',image||BASE+'/Icon_512.png']].forEach(([property,content])=>{
+      let el=document.querySelector('meta[property="'+property+'"]');
+      if(!el){el=document.createElement('meta');el.setAttribute('property',property);document.head.appendChild(el);}
+      el.content=content;
+    });
+  }
+  function setUrl(url){history.pushState({},'',url);}
+  function goHomeUrl(){if(location.pathname!=='/'||location.hash){history.pushState({},'','/');setMeta('ShopHub Uganda — Buy, Sell, Jobs & Services','Buy and sell products, discover services, land and agriculture listings, and find jobs in Uganda.',BASE+'/');}}
+  function productUrl(item){return '/product/'+encodeURIComponent(item.id)+'/'+window.shSlug(item.title);}
+  function jobUrl(job){return '/jobs/'+encodeURIComponent(job.id)+'/'+window.shSlug(job.title);}
+  function showProduct(item,changeUrl){
+    if(!item)return;
+    const url=productUrl(item);
+    if(changeUrl && location.pathname!==url)setUrl(url);
+    setMeta((item.title||'Product')+' | ShopHub Uganda',
+      [item.title,item.category,item.location,item.description,item.price].filter(Boolean).join(' — '),
+      BASE+url,item.image_url||((item.image_urls||[])[0])||BASE+'/Icon_512.png');
+  }
+  function showJob(job,changeUrl){
+    if(!job)return;
+    const url=jobUrl(job);
+    if(changeUrl && location.pathname!==url)setUrl(url);
+    setMeta((job.title||'Job vacancy')+' | ShopHub Jobs',
+      [job.title,job.company,job.location,job.job_type,job.description].filter(Boolean).join(' — '),
+      BASE+url);
+  }
+  const originalOpenProduct=window.openProductModal;
+  if(originalOpenProduct)window.openProductModal=function(item){showProduct(item,true);return originalOpenProduct.apply(this,arguments);};
+  const originalCloseProduct=window.closeProductModal;
+  if(originalCloseProduct)window.closeProductModal=function(){const r=originalCloseProduct.apply(this,arguments);goHomeUrl();return r;};
+  const originalOpenJob=window.openJobDetails;
+  if(originalOpenJob)window.openJobDetails=function(id){const job=(window._allJobs||[]).find(j=>String(j.id)===String(id));if(job)showJob(job,true);return originalOpenJob.apply(this,arguments);};
+  const originalCloseJob=window.closeJobDetails;
+  if(originalCloseJob)window.closeJobDetails=function(){const r=originalCloseJob.apply(this,arguments);if(/^\/jobs\/[^/]+/.test(location.pathname))history.pushState({},'','/jobs');setMeta('ShopHub Jobs — Find Work in Uganda','Browse job vacancies in Uganda and international opportunities.',BASE+'/jobs');return r;};
+  async function resolveRoute(){
+    const r=routeInfo();
+    if(r.type==='home'){setMeta('ShopHub Uganda — Buy, Sell, Jobs & Services','Buy and sell products, discover services, land and agriculture listings, and find jobs in Uganda.',BASE+'/');return;}
+    if(r.type==='category'){
+      const name=window.shSlug(r.slug).replace(/-/g,' ');
+      setMeta(name.replace(/\b\w/g,c=>c.toUpperCase())+' | ShopHub Uganda','Browse '+name+' listings on ShopHub Uganda.',BASE+'/category/'+r.slug);
+      return;
+    }
+    if(r.type==='jobs'){if(window.switchView)window.switchView('jobs');setMeta('ShopHub Jobs — Find Work in Uganda','Browse job vacancies in Uganda and international opportunities.',BASE+'/jobs');return;}
+    if(r.type==='product'){
+      let item=(window.allProducts||[]).find(x=>String(x.id)===String(r.id));
+      if(!item&&window.supabaseClient){
+        const result=await window.supabaseClient.from('listings').select('*').eq('id',r.id).maybeSingle();
+        if(!result.error)item=result.data;
+      }
+      if(item){if(window.openProductModal)window.openProductModal(item);}
+      else setMeta('Product listing | ShopHub Uganda','This listing may have expired or is no longer available.',BASE+location.pathname);
+      return;
+    }
+    if(r.type==='job'){
+      if(window.loadJobsFromSupabase)await window.loadJobsFromSupabase();
+      const job=(window._allJobs||[]).find(j=>String(j.id)===String(r.id));
+      if(job&&window.openJobDetails)window.openJobDetails(job.id);
+      else setMeta('Job vacancy | ShopHub Jobs','This vacancy may have expired or is no longer available.',BASE+location.pathname);
+    }
+  }
+  // Use real anchors for navigation while preserving the existing modal-based interface.
+  document.addEventListener('click',function(e){
+    const a=e.target.closest('a[href]');
+    if(!a||a.origin!==location.origin)return;
+    const href=a.getAttribute('href')||'';
+    if(!/^\/(product|jobs)\//.test(href))return;
+    e.preventDefault();
+    e.stopPropagation();
+    history.pushState({},'',href);
+    resolveRoute();
+  });
+  window.addEventListener('popstate',resolveRoute);
+  // Convert old ?item=ID links to the clean product URL once listings are available.
+  const legacyItem=new URLSearchParams(location.search).get('item');
+  if(legacyItem){
+    const upgradeLegacyLink=()=>{
+      const item=(window.allProducts||[]).find(x=>String(x.id)===String(legacyItem));
+      if(item){history.replaceState({},'',productUrl(item));resolveRoute();return true;}
+      return false;
+    };
+    if(!upgradeLegacyLink()){
+      const priorFetch=window.fetchListings;
+      if(priorFetch&&!window._legacyUrlFetchWrapped){
+        window._legacyUrlFetchWrapped=true;
+        window.fetchListings=async function(){const result=await priorFetch.apply(this,arguments);upgradeLegacyLink();return result;};
+      }
+    }
+  }
+  window.addEventListener('DOMContentLoaded',function(){
+    const r=routeInfo();
+    if(r.type==='jobs'||r.type==='job'){if(window.switchView)window.switchView('jobs');}
+    resolveRoute();
+  });
+  // Make category cards shareable/crawlable when a category control is used.
+  window.shSetCategoryUrl=function(category){
+    const slug=window.shSlug(category);
+    history.pushState({},'','/category/'+slug);
+    setMeta(category+' | ShopHub Uganda','Browse '+category+' listings on ShopHub Uganda.',BASE+'/category/'+slug);
+  };
+})();
+</script>
+
+</body>
+</html>
