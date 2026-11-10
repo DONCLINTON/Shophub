@@ -276,6 +276,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://shhop.netlify.app/product/59/dressing-mirror</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/product/60/women-s-top</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://shhop.netlify.app/jobs/1/painter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
