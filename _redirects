@@ -1,3 +1,0 @@
-# Keep the SPA available for direct visits to clean listing URLs.
-# More-specific real files (CSS, JS, images, manifest, sitemap) are served normally.
-/*  /index.html  200
