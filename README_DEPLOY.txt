@@ -1,16 +1,23 @@
 SHOPHUB — CLEAN PRODUCT URL + WHATSAPP FIXES (TEST BUILD)
 
 PURPOSE
-This code is for ShopHub at https://shhop.netlify.app/. Deploy it first to your test site, https://sitetestv3.netlify.app/, to verify before production.
+This code is for ShopHub UG at https://shhop.netlify.app/. The SEO Edge Function is configured for the production domain. If you deploy to a temporary test domain first, change the `SITE` constant at the top of `netlify/edge-functions/seo.ts` to that test domain, then restore it to `https://shhop.netlify.app` before production.
 
 DEPLOY
 1. Extract this ZIP.
-2. Upload the CONTENTS of this folder to the Netlify site sitetestv3.netlify.app (index.html must be at the deployment root).
-3. Wait for the deploy to finish. If an old version still appears, hard-refresh or clear the site's cached data/service worker.
+2. Upload the CONTENTS of this folder to the connected Netlify/GitHub repository (index.html, netlify.toml and the netlify/ folder must all be at the repository root).
+3. Wait for the deploy to finish. Confirm the deploy log shows the `seo` Edge Function deployed successfully. If an old version still appears, hard-refresh or clear the site's cached data/service worker.
+4. After production deployment, open `https://shhop.netlify.app/sitemap.xml`. It should list the homepage, `/jobs`, and the current product/job detail URLs. If it only lists the homepage and jobs page, inspect the Netlify Edge Function log for Supabase/RLS errors.
 
 EXPECTED PRODUCT URL
-  https://sitetestv3.netlify.app/product/14/product-title
-On the final production deploy, the same route will use https://shhop.netlify.app/product/14/product-title. Product title slugs are generated from the Supabase listing title; the ID keeps each URL unique.
+  https://shhop.netlify.app/product/14/product-title
+Product title slugs are generated from the Supabase listing title; the ID keeps each URL unique.
+
+SEO AND PHONE REPAIRS IN THIS BUILD
+- Adds a Netlify Edge Function that generates a live sitemap from Supabase products and jobs.
+- Adds route-specific server-side canonical URLs, page titles, descriptions and Product/JobPosting structured data.
+- Normalizes Ugandan phone numbers to E.164 for storage/display (e.g. +256744343456); WhatsApp links use the required digits-only format.
+- Increments the service-worker cache version so returning visitors fetch the updated app shell.
 
 WHAT THIS BUILD FIXES
 - Makes the product title a visible, real link to its descriptive product route.
@@ -33,5 +40,11 @@ TEST CHECKLIST
 NOTES
 - Existing Supabase listing IDs, tables, and seller contact values are preserved.
 - A seller may have entered an incorrect phone number; this build does not guess or substitute a number. Correct the listing data at its source if confirmed wrong.
-- Sitemap currently includes the homepage and jobs landing page; dynamic inclusion of every product/job URL is a separate SEO task.
+- The sitemap is now generated dynamically by a Netlify Edge Function from Supabase listings and jobs.
 - Never add a Supabase service-role key to frontend files.
+
+SEARCH CONSOLE AFTER DEPLOY
+1. Test the homepage, one product URL and one job URL with URL Inspection.
+2. Confirm the user-declared canonical and Google-visible canonical point to the exact intended product/job URL.
+3. Submit `https://shhop.netlify.app/sitemap.xml` in Search Console.
+4. Request indexing for a small sample of important product/job URLs. Google decides when/if to index; deployment does not guarantee indexing.

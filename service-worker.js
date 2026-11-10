@@ -1,4 +1,4 @@
-const CACHE_NAME = "shophub-cache-v5";
+const CACHE_NAME = "shophub-cache-v6";
 const urlsToCache = ["/", "/index.html", "/icon_192.png", "/Icon_512.png", "/manifest.json"];
 
 self.addEventListener("install", event => {

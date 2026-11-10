@@ -1,0 +1,15 @@
+[[edge_functions]]
+function = "seo"
+path = "/sitemap.xml"
+
+[[edge_functions]]
+function = "seo"
+path = "/product/*"
+
+[[edge_functions]]
+function = "seo"
+path = "/jobs"
+
+[[edge_functions]]
+function = "seo"
+path = "/jobs/*"
