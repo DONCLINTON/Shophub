@@ -326,6 +326,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://shhop.netlify.app/product/69/asen-diesel-generator</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/product/70/laptop</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://shhop.netlify.app/jobs/1/painter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
