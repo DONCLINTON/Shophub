@@ -21,7 +21,7 @@ A browser-based static website cannot keep a key secret from visitors. This anon
 6. Click **Deploy site**. Netlify will automatically redeploy when you push future commits to the connected branch.
 7. If you are connecting the production site, confirm the correct Netlify site and custom domain before deploying.
 
-The existing `_redirects` file supports direct visits to clean product and job URLs. Netlify Edge Functions in `netlify/edge-functions/seo.ts` provide route-specific canonical metadata and JSON-LD for product/job detail routes, and generate a live sitemap from the Supabase `listings` and `jobs` tables at `/sitemap.xml`.
+The existing `_redirects` file supports direct visits to clean product, job and brokerage URLs. `scripts/generate-sitemap.mjs` and the GitHub Actions workflow refresh the sitemap from Supabase and generate crawlable static detail pages for active rentals. The sitemap is served as the real `/sitemap.xml` file.
 
 ## Before going live
 
@@ -44,4 +44,8 @@ The standalone rental page is available at `/brokerage/` and reads/writes the `p
 Before deploying, run `supabase_upgrade.sql` in the existing Supabase project's
 SQL Editor. See `README_DEPLOY.txt` for the required deployment order and test
 checklist. Test on a separate Netlify preview site before replacing production.
-PHOTO VIEWER UPDATE (v2): Product photos in listing details can now be tapped to open a full-screen viewer. Supports pinch-to-zoom on touchscreens, swipe left/right between photos, on-screen previous/next and zoom controls, mouse-wheel/double-click zoom, and keyboard ArrowLeft/ArrowRight, +/-, and Escape.
+PHOTO VIEWER: Product photos in listing details open a full-screen viewer with pinch/tap zoom and swipe navigation. The final package preserves this existing viewer.
+
+PAYMENT NOTICE: The footer now clearly states “DEAL DIRECTLY WITH THE SELLER”. ShopHub does not process payments; buyers and sellers agree on payment directly.
+
+SEO: The sitemap includes product routes and the brokerage directory. The daily GitHub Actions workflow generates static SEO pages and sitemap entries for active rentals.

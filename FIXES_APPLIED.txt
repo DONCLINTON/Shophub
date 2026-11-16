@@ -1,23 +1,31 @@
-SHOPHUB UG — SOURCE FIXES APPLIED
+SHOPHUB UG — FINAL PACKAGE CHANGE LOG
 
-1) PHONE NUMBER HANDLING
-- Phone numbers are normalized to E.164 format for storage and display.
-- Example: +256744343456 remains +256744343456; a local 0744343456 is stored as +256744343456.
-- WhatsApp links intentionally remove the plus sign because wa.me expects the international number as digits only.
-- Applied to seller listing submissions, seller contact links, employer WhatsApp links and job applications.
-- Existing database rows are not bulk-modified. Existing numbers are normalized when displayed/used; newly submitted/updated values use E.164.
+1) PRODUCT IMAGE VIEWER
+- Preserved the existing image click-to-open and full-screen zoom viewer from the image-click fix package.
+- Tap/click to open, zoom controls, pinch-to-zoom and swipe navigation remain present.
 
-2) INDEXING / SEO
-- Added a Netlify Edge Function for /product/* and /jobs/* that injects route-specific title, description, canonical URL and structured data into the initial HTML response.
-- This addresses the root-shell canonical issue: deep product/job URLs no longer initially declare the homepage as canonical.
-- Added a dynamic /sitemap.xml generated from current Supabase listings and jobs, so new listings/jobs appear automatically.
-- Kept robots.txt allowing crawling and pointing to the sitemap.
-- Updated the service-worker cache version to v6.
+2) PAYMENT MESSAGE
+- Removed the “Secure Payments” heading and Visa, Mastercard, MTN MoMo, Airtel and Cash badges.
+- Replaced them with a prominent orange/amber “DEAL DIRECTLY WITH THE SELLER” notice.
+- Clearly states that ShopHub does not collect or process payments and that buyers/sellers agree directly.
 
-IMPORTANT DEPLOYMENT NOTES
-- Deploy the folder contents to the existing Netlify site connected to GitHub.
-- Keep netlify.toml and the netlify/edge-functions/seo.ts file at the repository root.
-- Confirm the Netlify deploy log shows the "seo" Edge Function deployed.
-- The Edge Function uses the existing public Supabase anon key; no service-role key is added.
-- After deployment, verify /sitemap.xml and test one product URL plus one job URL in Search Console.
-- Google controls crawling/indexing; code changes improve discovery and canonical signals but cannot guarantee immediate indexing.
+3) RENTAL DISCOVERY / SEO
+- Kept /brokerage/ as a standalone page with canonical URL and index,follow directives.
+- Added a “View property details” internal link to each active rental card.
+- Extended scripts/generate-sitemap.mjs to generate crawlable static detail pages for active house_rentals records, including canonical metadata, descriptions, Open Graph data and structured data.
+- Sitemap generation includes homepage, jobs, brokerage, product detail URLs and active rental detail URLs.
+- GitHub Actions refreshes the SEO pages and sitemap daily at 03:17 UTC, or on manual dispatch.
+- robots.txt continues to allow crawling and points to /sitemap.xml.
+
+4) CACHE
+- Incremented service-worker cache name to v9 so clients do not retain the older cached shell.
+
+5) BACKEND
+- Buyer-request and rental schema alignment from the previous backend fix is retained.
+- No new database migration is required for this frontend/SEO deployment.
+- No service-role key has been added.
+
+DEPLOYMENT
+- Upload the extracted ZIP CONTENTS to the existing GitHub repository root.
+- Do not upload the ZIP itself as a single file.
+- See README_DEPLOY.txt for the deployment and Google Search Console checklist.

@@ -88,6 +88,8 @@ window.normalizeWhatsAppNumber=function(value){return window.normalizePhone(valu
 @media(min-width:900px){.category-browser{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:480px){.market-tab{padding:10px 7px;gap:7px}.market-tab .tab-icon{width:34px;height:34px;font-size:18px}.market-tab strong{font-size:11px}.market-tab small{font-size:9px}.category-tile{padding:9px}.category-tile .tile-icon{font-size:19px;width:27px}}
 
+
+.direct-deal-card{display:flex;align-items:center;gap:16px;margin:0 0 28px;padding:20px 22px;border:2px solid #fb923c;border-radius:18px;background:linear-gradient(115deg,#fff7ed 0%,#ffedd5 48%,#fff 100%);box-shadow:0 8px 26px rgba(234,88,12,.16);color:#7c2d12}.direct-deal-icon{flex:0 0 62px;width:62px;height:62px;display:grid;place-items:center;border-radius:18px;background:#ea580c;color:white;font-size:34px;box-shadow:0 5px 14px rgba(194,65,12,.25)}.direct-deal-copy{min-width:0}.direct-deal-eyebrow{margin:0 0 4px;font-size:10px;letter-spacing:.16em;font-weight:900;color:#c2410c}.direct-deal-copy h4{margin:0 0 6px;font-size:clamp(17px,2.5vw,23px);line-height:1.15;font-weight:950;letter-spacing:.015em;color:#9a3412}.direct-deal-copy p:last-child{margin:0;font-size:13px;line-height:1.55;color:#7c2d12}.direct-deal-copy strong{font-weight:900;color:#9a3412}@media(max-width:520px){.direct-deal-card{align-items:flex-start;padding:16px;gap:12px}.direct-deal-icon{width:48px;height:48px;flex-basis:48px;border-radius:14px;font-size:27px}.direct-deal-copy p:last-child{font-size:12px}}
 </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen pb-8 antialiased overflow-x-hidden max-w-full transition-colors duration-300">
@@ -223,7 +225,14 @@ window.normalizeWhatsAppNumber=function(value){return window.normalizePhone(valu
   </div>
   <div class="stats-grid"><div class="stat-card"><div class="stat-number">20</div><div class="stat-label">Categories</div></div><div class="stat-card"><div class="stat-number">27+</div><div class="stat-label">Listings</div></div><div class="stat-card"><div class="stat-number">330+</div><div class="stat-label">Sellers</div></div><div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Access</div></div></div>
   <div class="newsletter-card"><h3>Never Miss a Deal</h3><p>Subscribe for new listings and updates.</p><form class="subscribe-form" onsubmit="return false;"><input type="email" placeholder="Enter email..." required /><button type="submit">Subscribe</button></form></div>
-  <div class="payments-section"><h4>Secure Payments</h4><div class="payment-badges"><span class="pay-badge visa">💳 Visa</span><span class="pay-badge mastercard">💳 Mastercard</span><span class="pay-badge momo">📲 MTN MoMo</span><span class="pay-badge airtel">📲 Airtel</span><span class="pay-badge cash">💵 Cash</span></div></div>
+  <section class="direct-deal-card" aria-label="How ShopHub transactions work">
+    <div class="direct-deal-icon" aria-hidden="true">🤝</div>
+    <div class="direct-deal-copy">
+      <p class="direct-deal-eyebrow">SHOPHUB BUYER & SELLER NOTICE</p>
+      <h4>DEAL DIRECTLY WITH THE SELLER</h4>
+      <p>Found what you want? Contact the seller, agree on the price and payment method, then complete your deal directly with them. <strong>ShopHub does not collect or process payments.</strong></p>
+    </div>
+  </section>
   <footer class="shophub-footer">
     <h3>ShopHub Uganda</h3><p class="tagline">Connecting buyers and sellers across Uganda.</p>
     <p class="footer-desc">ShopHub is Uganda's premier online marketplace for buying and selling electronics, vehicles, land, home appliances, and professional services. Post your items for free and reach thousands of potential buyers instantly.</p>
@@ -768,7 +777,23 @@ window.applySavedSearch=function(i){const x=window._shSavedSearches?.[i];if(!x)r
 window.openGrowthTools=function(){openFeatureModal('🚀 Seller growth tools',`<div class="space-y-3"><div class="p-3 rounded-xl bg-orange-50 dark:bg-slate-900"><b class="text-sm">Featured & promoted listings</b><p class="text-xs text-gray-500 mt-1">Promote selected listings for extra visibility. Paid placement, pricing and payment confirmation will be connected later.</p><span class="text-[10px] font-bold text-orange-600">COMING WITH DATABASE INTEGRATION</span></div><div class="p-3 rounded-xl bg-orange-50 dark:bg-slate-900"><b class="text-sm">Listing renewal & expiry</b><p class="text-xs text-gray-500 mt-1">Renew, pause or expire older listings and notify sellers before expiry.</p></div><div class="p-3 rounded-xl bg-orange-50 dark:bg-slate-900"><b class="text-sm">Seller analytics</b><p class="text-xs text-gray-500 mt-1">Track views, calls, WhatsApp clicks, saved listings and listing performance.</p></div></div>`);};
 
 /* Buyer requests are stored centrally in Supabase so every visitor can see them. */
-window.openListingImageById=function(id,index=0){const item=(window.allProducts||[]).find(x=>String(x.id)===String(id));if(!item)return;const imgs=getImageList(item);if(imgs.length)window.openImageLightbox(imgs,index);};
+window.openListingImageById=function(id,index=0){
+ const item=(window.allProducts||[]).find(x=>String(x.id)===String(id));
+ if(!item){console.warn('ShopHub image viewer: listing not found',id);return;}
+ // This helper is deliberately local to the classic script. getImageList() in
+ // index.html belongs to the module script and is not visible here.
+ let raw=item.image_urls;
+ if(typeof raw==='string'){
+  const value=raw.trim();
+  if(value.startsWith('[')){try{raw=JSON.parse(value);}catch(_){raw=null;}}
+  else if(value.startsWith('{')&&value.endsWith('}')){raw=value.slice(1,-1).split(',').map(x=>x.replace(/^\"(.*)\"$/,'$1').trim());}
+  else raw=value?[value]:null;
+ }
+ let imgs=Array.isArray(raw)?raw.filter(u=>typeof u==='string'&&u.trim()):[];
+ if(!imgs.length&&typeof item.image_url==='string'&&item.image_url.trim())imgs=[item.image_url.trim()];
+ if(imgs.length&&typeof window.openImageLightbox==='function')window.openImageLightbox(imgs,index);
+ else console.warn('ShopHub image viewer: this listing has no usable image URL',id);
+};
 function shPhone(v){return window.normalizePhone?window.normalizePhone(v):String(v||'').trim()}
 function shEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function renderBuyerRequest(row){
