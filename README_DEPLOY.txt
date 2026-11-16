@@ -48,3 +48,71 @@ SEARCH CONSOLE AFTER DEPLOY
 2. Confirm the user-declared canonical and Google-visible canonical point to the exact intended product/job URL.
 3. Submit `https://shhop.netlify.app/sitemap.xml` in Search Console.
 4. Request indexing for a small sample of important product/job URLs. Google decides when/if to index; deployment does not guarantee indexing.
+
+
+SHOPHUB MARKETPLACE UPGRADE — DEPLOYMENT ORDER
+================================================
+
+This package preserves the existing ShopHub project and adds:
+- Full-photo product display (contain rather than crop).
+- Seller / business name and optional subcategory fields.
+- Expanded category and subcategory choices.
+- Supabase-backed buyer requests with public WhatsApp contact.
+- A standalone rental page at /brokerage/ for rooms, self-contained units,
+  full houses and apartments.
+- Brokerage listings use public.house_rentals, with landlord/agent type, monthly rent, contact details,
+  optional descriptions, landmarks and optional photos.
+- Brokerage page sitemap entry and a clean Netlify redirect.
+- Service worker cache version update.
+
+IMPORTANT: Do not deploy the frontend until the SQL migration succeeds.
+
+1. BACK UP the current live GitHub repository and Supabase database.
+2. Open Supabase Dashboard -> SQL Editor for the project already used by ShopHub.
+3. Run the complete file: supabase_upgrade.sql
+   The SQL is additive: it adds two columns to public.listings, creates
+   buyer_requests, the legacy property_listings table, and the active
+   house_rentals table used by brokerage.html, plus the rental-photos bucket
+   and narrowly scoped public policies. It does not drop existing records.
+4. Confirm the SQL completed successfully.
+5. Deploy ALL files in this package to a separate Netlify test site or preview
+   branch first. Keep the current production main branch untouched.
+6. Test:
+   - Existing products and jobs still load.
+   - New product can be posted with seller/business name and subcategory.
+   - Product images display fully without cropping.
+   - Buyer request can be posted and appears in the public request list.
+   - Rental listing publishes with required details and with no photos.
+   - Rental listing also publishes with photos.
+   - WhatsApp contact links use the supplied phone number.
+   - /brokerage/ opens the rental page and its Back to Marketplace link works.
+   - /sitemap.xml and /robots.txt load as files.
+   - PWA install and offline shell still work.
+7. Only after the test site passes should you replace production files.
+
+SUPABASE NOTES
+--------------
+- Use the same Supabase project already configured in index.html.
+- Never put a Supabase service-role key in frontend files.
+- Buyer requests, legacy property listings and active house rentals are public marketplace records.
+  Their contact names and phone numbers are visible to site visitors by design.
+- The public insert policies allow anonymous posting, matching the current
+  public marketplace model. They do not provide spam prevention or identity
+  verification.
+- Public update/delete policies are intentionally not added.
+- The existing item-photos bucket and current listings/jobs tables are retained.
+- Existing listings may show "ShopHub Seller" until sellers add a seller_name.
+  New listing submissions require a seller/business name.
+- If an upload fails, check that the existing item-photos bucket is public and
+  permits uploads under the existing ShopHub policies. The upgrade SQL does
+  not alter that bucket.
+
+SEO / NETLIFY
+-------------
+- /brokerage/ is rewritten to brokerage.html before the existing SPA catch-all.
+- The old netlify.toml pointed at a missing "seo" Edge Function. Those broken
+  declarations have been removed. The real sitemap.xml and existing scheduled
+  GitHub sitemap generator remain in place.
+- The sitemap generator adds /brokerage/ while continuing to fetch product and
+  job URLs from Supabase.
+PHOTO VIEWER UPDATE (v2): Product photos in listing details can now be tapped to open a full-screen viewer. Supports pinch-to-zoom on touchscreens, swipe left/right between photos, on-screen previous/next and zoom controls, mouse-wheel/double-click zoom, and keyboard ArrowLeft/ArrowRight, +/-, and Escape.

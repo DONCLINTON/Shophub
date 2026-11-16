@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopHub Property & Rentals | Find a House in Kampala</title>
+  <meta name="description" content="Find rental rooms, self-contained units, apartments and houses across Kampala neighbourhoods. Landlords and brokers can post available rentals on ShopHub.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://shhop.netlify.app/brokerage/">
+  <meta name="theme-color" content="#059669">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{background:#f8fafc;color:#0f172a}
+    .field{width:100%;border:1px solid #dbe2ea;border-radius:12px;padding:12px 13px;font-size:14px;background:white;color:#0f172a}
+    .field:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.13)}
+    .rental-card{border:1px solid #e2e8f0;border-radius:18px;background:#fff;overflow:hidden;box-shadow:0 3px 12px rgba(15,23,42,.045);transition:transform .18s,box-shadow .18s}
+    .rental-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.1)}
+    .rental-photo,.no-photo{width:100%;height:210px}
+    .rental-photo{object-fit:contain;background:#eef2f7}
+    .no-photo{display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(135deg,#ecfdf5,#e0f2fe);color:#0f766e}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:.2s;z-index:80}
+    .toast.show{transform:translate(-50%,0);opacity:1}
+    @media(max-width:600px){.rental-photo,.no-photo{height:185px}}
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="sticky top-0 z-40 bg-gradient-to-r from-emerald-700 to-teal-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <a href="/" class="text-xl sm:text-2xl font-black tracking-tight">SHOP<span class="text-amber-300">HUB</span><span class="ml-2 text-[10px] font-bold bg-white/15 rounded-full px-2 py-1 align-middle">PROPERTY</span></a>
+      <div class="flex items-center gap-2">
+        <a href="/jobs" class="rounded-full border border-white/30 bg-white/10 hover:bg-white/20 px-3 py-2 text-xs font-bold">💼 Jobs</a>
+        <a href="/" class="rounded-full bg-white text-emerald-800 hover:bg-emerald-50 px-4 py-2 text-xs font-black">← Back to Marketplace</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 sm:py-9 space-y-6">
+    <section class="rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-lg">
+      <div class="p-6 sm:p-9 grid md:grid-cols-[1.4fr_.8fr] items-center gap-6">
+        <div>
+          <p class="text-xs tracking-[.18em] uppercase font-black text-emerald-100">ShopHub Property & Rentals</p>
+          <h1 class="mt-2 text-3xl sm:text-4xl font-black leading-tight">Find a place to call home.</h1>
+          <p class="mt-3 text-sm sm:text-base text-emerald-50 max-w-2xl">Browse rooms, self-contained units, apartments and full houses around Kampala. Search by neighbourhood and rent, or advertise a property you have available.</p>
+          <div class="mt-5 flex flex-wrap gap-3"><a href="#rentals" class="rounded-xl bg-white text-emerald-800 px-5 py-3 text-sm font-black">Browse rentals ↓</a><button id="heroPostButton" class="rounded-xl border border-white/40 bg-white/10 hover:bg-white/20 px-5 py-3 text-sm font-black">+ Post a rental</button></div>
+        </div>
+        <div class="hidden md:grid grid-cols-2 gap-3">
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-4"><div class="text-3xl">🛏️</div><b class="block mt-2">Rooms</b><span class="text-xs text-emerald-100">Single & double</span></div>
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-4"><div class="text-3xl">🏠</div><b class="block mt-2">Homes</b><span class="text-xs text-emerald-100">Full houses</span></div>
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-4"><div class="text-3xl">🏢</div><b class="block mt-2">Apartments</b><span class="text-xs text-emerald-100">Different sizes</span></div>
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-4"><div class="text-3xl">📍</div><b class="block mt-2">Kampala</b><span class="text-xs text-emerald-100">Neighbourhood search</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+      <div class="flex flex-wrap items-end justify-between gap-3 mb-3"><div><h2 class="font-black text-lg">Find available rentals</h2><p class="text-xs text-slate-500 mt-1">Choose a house type, neighbourhood or maximum monthly rent.</p></div><button id="clearFilters" class="text-xs font-bold text-emerald-700 hover:text-emerald-900">Clear filters</button></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <select id="filterType" class="field"><option value="">All house types</option><option>Single room</option><option>Double room</option><option>Full house</option><option>Apartment</option><option>Single self-contained</option><option>Double self-contained</option></select>
+        <input id="filterArea" class="field" list="kampalaAreas" placeholder="Neighbourhood e.g. Kansanga">
+        <input id="filterRent" class="field" type="number" min="0" placeholder="Maximum rent (UGX)">
+        <button id="applyFilters" class="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm px-4 py-3">Find houses</button>
+      </div>
+      <datalist id="kampalaAreas"></datalist>
+    </section>
+
+    <section id="rentals" class="space-y-4 scroll-mt-24">
+      <div class="flex flex-wrap items-center justify-between gap-3"><div><p class="text-[10px] uppercase tracking-widest font-black text-emerald-700">Available properties</p><h2 class="text-2xl font-black">Rental listings</h2><p class="text-xs text-slate-500 mt-1" id="resultSummary">Loading available properties…</p></div><button id="postRentalButton" class="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm px-5 py-3">+ Post a rental</button></div>
+      <div id="rentalGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" aria-live="polite"><div class="col-span-full rounded-2xl border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">Loading rentals…</div></div>
+    </section>
+
+    <section id="postRentalPanel" class="hidden rounded-2xl border border-emerald-200 bg-white shadow-sm overflow-hidden scroll-mt-24">
+      <div class="bg-emerald-50 px-5 py-4 border-b border-emerald-100 flex items-start justify-between gap-3"><div><p class="text-[10px] uppercase tracking-widest font-black text-emerald-700">For landlords and agents</p><h2 class="text-xl font-black">Post a property / rental</h2><p class="text-xs text-slate-600 mt-1">Photos are optional. A basic advert with type, location, rent and contact details is enough.</p></div><button id="closePostForm" type="button" class="text-2xl leading-none text-slate-500" aria-label="Close form">×</button></div>
+      <form id="rentalForm" class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div><label class="block text-xs font-bold mb-1">House type <span class="text-red-600">*</span></label><select id="houseType" class="field" required><option value="">Choose house type</option><option>Single room</option><option>Double room</option><option>Full house</option><option>Apartment</option><option>Single self-contained</option><option>Double self-contained</option></select></div>
+        <div><label class="block text-xs font-bold mb-1">Neighbourhood / location <span class="text-red-600">*</span></label><input id="neighbourhood" class="field" list="kampalaAreas" required maxlength="100" placeholder="e.g. Kansanga, Nsambya, Mulago"><p class="text-[10px] text-slate-500 mt-1">Choose a suggestion or type another area.</p></div>
+        <div><label class="block text-xs font-bold mb-1">Monthly rent (UGX) <span class="text-red-600">*</span></label><input id="monthlyRent" class="field" type="number" min="1" step="1" required placeholder="350000"></div>
+        <div><label class="block text-xs font-bold mb-1">You are advertising as <span class="text-red-600">*</span></label><select id="advertiserType" class="field" required><option value="Landlord / Owner">Landlord / Owner</option><option value="Broker / Agent">Broker / Agent</option></select></div>
+        <div><label class="block text-xs font-bold mb-1">Contact name / agency <span class="text-red-600">*</span></label><input id="contactName" class="field" required maxlength="90" placeholder="Your name or agency"></div>
+        <div><label class="block text-xs font-bold mb-1">Phone / WhatsApp <span class="text-red-600">*</span></label><input id="contactPhone" class="field" type="tel" required maxlength="25" placeholder="e.g. 0757 815 846"></div>
+        <div class="sm:col-span-2"><label class="block text-xs font-bold mb-1">House photos (optional, up to 4)</label><input id="rentalPhotos" class="field" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="text-[10px] text-slate-500 mt-1">You can publish without photos. JPG, PNG or WebP images are accepted.</p><div id="photoPreview" class="flex flex-wrap gap-2 mt-2"></div></div>
+        <div class="sm:col-span-2"><label class="block text-xs font-bold mb-1">Nearby landmarks / directions (optional)</label><input id="landmarks" class="field" maxlength="180" placeholder="e.g. Near the main road, opposite the school"></div>
+        <div class="sm:col-span-2"><label class="block text-xs font-bold mb-1">Additional description (optional)</label><textarea id="rentalDescription" class="field" rows="3" maxlength="1200" placeholder="Describe the rooms, facilities, water, power, access road or other useful details."></textarea></div>
+        <div class="sm:col-span-2 flex flex-col-reverse sm:flex-row gap-2 pt-1"><button type="button" id="cancelPost" class="rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-3">Cancel</button><button id="publishRental" type="submit" class="flex-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-3">Publish rental advert</button></div>
+        <p class="sm:col-span-2 text-[10px] text-slate-500">Your contact name and phone number will be visible to people viewing this public advert. Only publish contact details you are comfortable sharing.</p>
+      </form>
+    </section>
+
+    <section class="rounded-2xl bg-slate-900 text-white p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><h2 class="font-black text-lg">Finished browsing?</h2><p class="text-xs text-slate-300 mt-1">Return to ShopHub to browse products, services and job opportunities.</p></div><a href="/" class="inline-flex rounded-xl bg-white text-slate-900 font-black text-sm px-5 py-3">← Back to Marketplace</a></section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white mt-10"><div class="max-w-7xl mx-auto px-4 py-5 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500"><span>© 2026 ShopHub Uganda · Property & Rentals</span><a href="/" class="font-bold text-emerald-700">Back to Marketplace</a></div></footer>
+  <div id="toast" class="toast rounded-xl bg-slate-900 text-white shadow-xl px-5 py-3 text-sm font-semibold"></div>
+
+  <script type="module">
+    const SUPABASE_URL='https://lulijpkeslesdeyemada.supabase.co';
+    const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1bGlqcGtlc2xlc2RleWVtYWRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMjM1MDMsImV4cCI6MjEwMDg5OTUwM30.ptWL1GF5DrshvF6VhwIs3HjRiA_qWgVlux3uk61Hi_A';
+    const client=window.supabase?.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+    const $=id=>document.getElementById(id);
+    const AREAS=['Kansanga','Nsambya','Mulago','Kisasi','Kisaasi','Kabalagala','Makindye','Muyenga','Bunga','Ggaba','Kibuli','Wandegeya','Kamwokya','Bukoto','Ntinda','Kira','Najjanankumbi','Lubowa','Naalya','Kyambogo','Bugolobi','Luzira','Nakawa','Kololo','Nakasero','Mbuya','Kireka','Nansana','Bweyogerere','Kawempe','Kanyanya','Kajjansi','Entebbe'];
+    $('kampalaAreas').innerHTML=AREAS.map(a=>`<option value="${a}"></option>`).join('');
+    const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    function normalisePhone(value){let digits=String(value||'').replace(/\D/g,'');if(digits.startsWith('00'))digits=digits.slice(2);if(digits.startsWith('256'))return '+'+digits;if(digits.startsWith('0')&&digits.length===10)return '+256'+digits.slice(1);if(digits.length===9&&digits.startsWith('7'))return '+256'+digits;return String(value||'').trim().startsWith('+')?'+'+digits:digits;}
+    function notify(message){const t=$('toast');t.textContent=message;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+    let allRentals=[];
+    function photoList(row){let list=row.image_urls??[];if(typeof list==='string'){try{list=JSON.parse(list)}catch{list=list?[list]:[]}}return Array.isArray(list)?list.filter(x=>typeof x==='string'&&x.trim()):[];}
+    function rentalCard(row){
+      const photos=photoList(row),photo=photos[0],phone=normalisePhone(row.phone),wa=phone.replace(/\D/g,'');
+      const picture=photo?`<img class="rental-photo" loading="lazy" src="${esc(photo)}" alt="${esc(row.house_type)} in ${esc(row.neighbourhood)}" onerror="this.outerHTML='&lt;div class=&quot;no-photo&quot;&gt;&lt;span class=&quot;text-4xl&quot;&gt;🏠&lt;/span&gt;&lt;b class=&quot;mt-2 text-sm&quot;&gt;Photo unavailable&lt;/b&gt;&lt;/div&gt;'">`:`<div class="no-photo"><span class="text-5xl">🏠</span><b class="mt-2 text-sm">No photos provided</b><span class="text-xs mt-1">Contact the advertiser for details</span></div>`;
+      const desc=row.description?`<p class="text-xs text-slate-600 mt-2 whitespace-pre-line">${esc(row.description)}</p>`:'';
+      const landmarks=row.landmarks?`<p class="text-xs text-slate-500 mt-2">📍 ${esc(row.landmarks)}</p>`:'';
+      const waText=encodeURIComponent(`Hello ${row.contact_name||''}, I saw your ${row.house_type||'rental'} in ${row.neighbourhood||''} on ShopHub. Is it still available?`);
+      return `<article class="rental-card">${picture}<div class="p-4"><div class="flex items-start justify-between gap-3"><div class="min-w-0"><span class="inline-flex rounded-full bg-emerald-50 text-emerald-800 px-2.5 py-1 text-[10px] font-black">${esc(row.house_type)}</span><h3 class="font-black text-lg mt-2 leading-tight">${esc(row.neighbourhood)}</h3></div><div class="text-right shrink-0"><b class="text-emerald-700 text-base">UGX ${Number(row.monthly_rent||0).toLocaleString()}</b><small class="block text-[10px] text-slate-500 font-semibold">per month</small></div></div><div class="mt-3 flex flex-wrap gap-2"><span class="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600">${esc(row.advertiser_type||'Advertiser')}</span>${photos.length>1?`<span class="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] text-slate-600">${photos.length} photos</span>`:''}</div>${desc}${landmarks}<div class="mt-3 text-xs text-slate-600"><span class="font-bold">Contact:</span> ${esc(row.contact_name||'Advertiser')}</div><div class="grid grid-cols-2 gap-2 mt-4"><a class="rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-center text-xs font-black py-3" href="tel:${esc(phone)}">📞 Call</a><a class="rounded-xl bg-green-600 hover:bg-green-700 text-white text-center text-xs font-black py-3" href="https://wa.me/${esc(wa)}?text=${waText}" target="_blank" rel="noopener">💬 WhatsApp</a></div></div></article>`;
+    }
+    function applyFilters(){const type=$('filterType').value.toLowerCase(),area=$('filterArea').value.trim().toLowerCase(),max=Number($('filterRent').value)||Infinity;const filtered=allRentals.filter(x=>(!type||String(x.house_type||'').toLowerCase()===type)&&(!area||String(x.neighbourhood||'').toLowerCase().includes(area))&&Number(x.monthly_rent||0)<=max);renderRentals(filtered);}
+    function renderRentals(rows){$('resultSummary').textContent=`${rows.length} rental advert${rows.length===1?'':'s'} found`;const root=$('rentalGrid');root.innerHTML=rows.length?rows.map(rentalCard).join(''):`<div class="col-span-full rounded-2xl border border-dashed border-slate-300 p-9 text-center"><div class="text-4xl">🏘️</div><h3 class="font-black mt-3">No rentals match this search</h3><p class="text-sm text-slate-500 mt-1">Try another neighbourhood or increase the maximum rent.</p><button id="resetEmpty" class="mt-4 rounded-xl bg-emerald-600 text-white font-bold px-4 py-2 text-xs">Show all rentals</button></div>`;const emptyBtn=$('resetEmpty');if(emptyBtn)emptyBtn.addEventListener('click',clearFilters);}
+    async function loadRentals(){const root=$('rentalGrid');if(!client){root.innerHTML='<div class="col-span-full text-center text-red-600 p-8">Database client could not be started. Please reload the page.</div>';return;}root.innerHTML='<div class="col-span-full text-center text-slate-500 p-8">Loading available rentals…</div>';const{data,error}=await client.from('house_rentals').select('id,house_type,neighbourhood,monthly_rent,advertiser_type,contact_name,phone,image_urls,description,landmarks,status,created_at').eq('status','active').order('created_at',{ascending:false}).limit(200);if(error){root.innerHTML='<div class="col-span-full rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 p-6 text-sm"><b>Rental listings are not connected yet.</b><p class="mt-1">Apply the included Supabase upgrade SQL, then reload this page.</p></div>'; $('resultSummary').textContent='Database setup required';console.error('ShopHub house_rentals:',error.message);return;}allRentals=data||[];applyFilters();}
+    function showPostForm(){ $('postRentalPanel').classList.remove('hidden');$('postRentalPanel').scrollIntoView({behavior:'smooth',block:'start'}); }
+    function hidePostForm(){ $('postRentalPanel').classList.add('hidden');$('rentalForm').reset();$('photoPreview').innerHTML=''; }
+    function clearFilters(){ $('filterType').value='';$('filterArea').value='';$('filterRent').value='';renderRentals(allRentals); }
+    $('heroPostButton').addEventListener('click',showPostForm);$('postRentalButton').addEventListener('click',showPostForm);$('closePostForm').addEventListener('click',hidePostForm);$('cancelPost').addEventListener('click',hidePostForm);$('applyFilters').addEventListener('click',applyFilters);$('clearFilters').addEventListener('click',clearFilters);
+    ['filterType','filterArea','filterRent'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();applyFilters();}}));
+    $('rentalPhotos').addEventListener('change',()=>{const selected=Array.from($('rentalPhotos').files||[]);if(selected.length>4)notify('Only the first four photos will be uploaded.');const files=selected.slice(0,4);$('photoPreview').innerHTML='';files.forEach(file=>{const url=URL.createObjectURL(file);const img=document.createElement('img');img.src=url;img.alt='Selected rental photo';img.className='w-20 h-16 object-contain bg-slate-100 rounded-lg border border-slate-200';$('photoPreview').appendChild(img);});});
+    $('rentalForm').addEventListener('submit',async e=>{
+      e.preventDefault();if(!client){notify('Database connection is unavailable');return;}
+      const files=Array.from($('rentalPhotos').files||[]).slice(0,4);const row={house_type:$('houseType').value,neighbourhood:$('neighbourhood').value.trim(),monthly_rent:Number($('monthlyRent').value),advertiser_type:$('advertiserType').value,contact_name:$('contactName').value.trim(),phone:normalisePhone($('contactPhone').value),description:$('rentalDescription').value.trim()||null,landmarks:$('landmarks').value.trim()||null,image_urls:[],status:'active'};
+      if(!row.house_type||!row.neighbourhood||!row.monthly_rent||row.monthly_rent<=0||!row.contact_name||!row.phone){notify('Complete all required fields first');return;}
+      if(files.length>4){notify('You can upload a maximum of four photos');return;}
+      const button=$('publishRental');button.disabled=true;button.textContent='Publishing…';const uploadedPaths=[];
+      try{
+        for(let i=0;i<files.length;i++){const file=files[i];if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Use JPG, PNG or WebP photos only.');if(file.size>5*1024*1024)throw new Error('Each image must be 5 MB or smaller.');const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');const path=`${Date.now()}_${i}_${safe}`;const{error:uploadError}=await client.storage.from('rental-photos').upload(path,file,{upsert:false});if(uploadError)throw new Error('Photo upload failed: '+uploadError.message);uploadedPaths.push(path);const{data:urlData}=client.storage.from('rental-photos').getPublicUrl(path);row.image_urls.push(urlData.publicUrl);}
+        const{error}=await client.from('house_rentals').insert([row]);if(error)throw new Error(error.message);
+        hidePostForm();notify('Rental advert published successfully');await loadRentals();$('rentals').scrollIntoView({behavior:'smooth',block:'start'});
+      }catch(err){if(uploadedPaths.length){try{await client.storage.from('rental-photos').remove(uploadedPaths);}catch(_){}}notify(err.message||'Could not publish this rental');console.error('ShopHub rental submission:',err);}
+      finally{button.disabled=false;button.textContent='Publish rental advert';}
+    });
+    loadRentals();
+  </script>
+</body>
+</html>

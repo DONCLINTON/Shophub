@@ -336,11 +336,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://shhop.netlify.app/product/71/payway-machine</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://shhop.netlify.app/jobs/1/painter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -354,5 +349,10 @@
     <loc>https://shhop.netlify.app/jobs/3/workshop-accounts-assistant-m-f-job-at-cfao-mobility</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/brokerage/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

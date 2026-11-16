@@ -1,3 +1,6 @@
-# Keep the SPA available for direct visits to clean listing URLs.
-# More-specific real files (CSS, JS, images, manifest, sitemap) are served normally.
+# Serve the standalone rental/brokerage page before the SPA catch-all.
+/brokerage/  /brokerage.html  200
+/brokerage   /brokerage.html  200
+
+# Keep clean product and jobs routes available through the existing SPA.
 /*  /index.html  200

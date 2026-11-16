@@ -33,3 +33,15 @@ The existing `_redirects` file supports direct visits to clean product and job U
 ## Notes
 
 This project uses a static site setup; no Node build step is required for the current version. `sitemap.xml` is static and does not automatically refresh with new products/jobs.
+
+
+## Marketplace and rental upgrade
+
+The marketplace now supports seller/business names, optional subcategories,
+expanded categories, uncropped product photos and public buyer requests.
+The standalone rental page is available at `/brokerage/` and reads/writes the `public.house_rentals` table.
+
+Before deploying, run `supabase_upgrade.sql` in the existing Supabase project's
+SQL Editor. See `README_DEPLOY.txt` for the required deployment order and test
+checklist. Test on a separate Netlify preview site before replacing production.
+PHOTO VIEWER UPDATE (v2): Product photos in listing details can now be tapped to open a full-screen viewer. Supports pinch-to-zoom on touchscreens, swipe left/right between photos, on-screen previous/next and zoom controls, mouse-wheel/double-click zoom, and keyboard ArrowLeft/ArrowRight, +/-, and Escape.

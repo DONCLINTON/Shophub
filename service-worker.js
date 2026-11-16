@@ -1,5 +1,5 @@
-const CACHE_NAME = "shophub-cache-v6";
-const urlsToCache = ["/", "/index.html", "/icon_192.png", "/Icon_512.png", "/manifest.json"];
+const CACHE_NAME = "shophub-cache-v8";
+const urlsToCache = ["/", "/index.html", "/icon_192.png", "/Icon_512.png", "/manifest.json", "/brokerage.html", "/brokerage/"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
