@@ -386,6 +386,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://shhop.netlify.app/product/83/empty-stabex-cyclinder</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://shhop.netlify.app/jobs/1/painter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -402,6 +407,16 @@
   </url>
   <url>
     <loc>https://shhop.netlify.app/jobs/13/electrical-technician</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/28/research-assistants-30-positions-baseline-data-collection</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/29/software-developer</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
