@@ -391,6 +391,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://shhop.netlify.app/product/84/plot</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://shhop.netlify.app/jobs/1/painter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -421,6 +426,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://shhop.netlify.app/jobs/30/supermarket-attendants</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://shhop.netlify.app/rentals/1/double-room-nsambya-kilombe/</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -429,5 +439,11 @@
     <loc>https://shhop.netlify.app/rentals/2/single-self-contained-mutungo/</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/rentals/3/double-room-kansanga-kitalanga/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://lulijpkeslesdeyemada.supabase.co/storage/v1/object/public/rental-photos/1795337740391_0_1001911131.jpg</image:loc></image:image>
   </url>
 </urlset>
