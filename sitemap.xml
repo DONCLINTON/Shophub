@@ -401,6 +401,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://shhop.netlify.app/product/86/croiler-chicken</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/product/87/50x100ft-mbarara-city-plot</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://shhop.netlify.app/jobs/1/painter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -432,6 +442,31 @@
   </url>
   <url>
     <loc>https://shhop.netlify.app/jobs/30/supermarket-attendants</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/31/financial-advisors-icea-lion-money-markets-and-investments</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/32/sales-executives-field-based</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/33/sales-agents</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/34/sales-agents-sanlamallianz</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://shhop.netlify.app/jobs/35/sales-and-marketing-agents-alpha-prumed-agency</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
